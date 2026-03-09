@@ -30,10 +30,8 @@ Route::get('/faq', function () {
     return view('faq');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
-    Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
-});
+Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
+Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
 
 // Manual auth routes (login, register, password reset, email verification)
 Route::get('login', [AuthController::class, 'showLogin'])->name('login');

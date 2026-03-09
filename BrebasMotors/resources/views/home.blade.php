@@ -4,7 +4,7 @@
 
     <div class="main-banner" id="top">
         <video autoplay muted loop id="bg-video">
-            <source src="{{ asset('resources/images/video1.mp4') }}" type="video/mp4" />
+            <source src="resources/images/video1.mp4" type="video/mp4" />
         </video>
 
         <div class="video-overlay header-text">
@@ -22,7 +22,7 @@
                 <div class="col-lg-6 offset-lg-3">
                     <div class="section-heading">
                         <h2>As nossas máquinas em <em>destaque</em></h2>
-                                <img src="{{ asset('resources/images/line-dec.png') }}" alt="">
+                        <img src="resources/images/line-dec.png" alt="Line Decoration">
                     </div>
                 </div>
             </div>
@@ -79,13 +79,13 @@
 
 
     <section class="section section-bg" id="schedule"
-        style="background-image: url({{ asset('resources/images/car-image-1-1200x600.jpg') }})">
+        style="background-image: url('resources/images/car-image-1-1200x600.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3">
                     <div class="section-heading dark-bg">
                         <h2><em>Sobre Nós</em></h2>
-                        <img src="{{ asset('resources/images/line-dec.png') }}" alt="">
+                        <img src="resources/images/line-dec.png" alt="">
                         <p>Olá! Somos a Br3basMotors, a mais nova empresa que veio mostrar a Portugal tudo o que o
                             mercado automóvel tem de melhor a oferecer.</p>
                     </div>
@@ -101,7 +101,7 @@
     </section>
 
 
-    <section class="section section-bg" id="call-to-action" style="background-image: url({{ asset('resources/images/banner-image-1-1920x500.jpg') }})">
+    <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/banner-image-1-1920x500.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">

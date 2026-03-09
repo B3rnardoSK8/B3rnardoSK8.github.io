@@ -17,7 +17,7 @@
                     <div class="col-12">
                         <nav class="main-nav">
                             <a href="/" class="logo">
-                                <img src="{{ asset('resources/images/logo.png') }}" alt="BR3BAS Motors Logo" style="height: 150px;">
+                                <img src="resources/images/logo.png" alt="BR3BAS Motors Logo" style="height: 150px;">
                             </a>
                             <ul class="nav">
                                 <li><a href="/" class="active">Início</a></li>
@@ -32,10 +32,9 @@
                                     </div>
                                 </li>
                                 <li><a href="/contact">Contacto</a></li>
-                            </ul>
-                            <ul class="nav" style="display:inline-block; margin-left:10px;">
+                                
                                 @guest
-                                    <li class="login-item"><a href="{{ route('login') }}"><img src="{{ asset('resources/images/loginPerson.png') }}" alt="Login" style="height:36px;"></a></li>
+                                    <li class="login-item"><a href="{{ route('login') }}"><img src="resources/images/loginPerson.png" alt="Login" style="height:36px;"></a></li>
                                 @else
                                     <li class="login-item" style="display:flex; align-items:center; gap:8px;">
                                         <span style="color:#fff;">Olá, {{ Auth::user()->name }}</span>

@@ -616,7 +616,28 @@ header
 }
 
 
-/* 
+/* Small top-gap fix: ensure no unexpected white gap at top
+   - remove default margins, fix header at top and reserve space for it
+   This is minimal and can be reverted if undesired. */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.header-area {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+/* Reserve space for the fixed header so page content isn't covered */
+body > main, .container, .main-banner {
+  padding-top: 80px;
+}
+
+/*
 ---------------------------------------------
 banner
 --------------------------------------------- 
