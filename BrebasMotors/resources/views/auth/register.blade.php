@@ -1,23 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-PT">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="{{ url('/') }}/">
-    <title>Registo - BrebasMotors</title>
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="resources/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="resources/css/font-awesome.css">
-    <link rel="stylesheet" href="resources/css/style.css">
-    <link rel="stylesheet" href="resources/css/app.css">
-    <link rel="stylesheet" href="resources/css/login-style.css">
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
+
+
     <video class="login-bg-video" autoplay muted loop playsinline>
         <source src="resources/images/video1.mp4" type="video/mp4">
     </video>
     <div class="login-bg-overlay"></div>
-    <x-header />
 
     <div class="login-page">
         <div class="login-container">
@@ -96,9 +85,4 @@
     </div>
     
 
-    <script src="resources/js/jquery-2.1.0.min.js"></script>
-    <script src="resources/js/popper.js"></script>
-    <script src="resources/js/bootstrap.min.js"></script>
-    <script src="resources/js/login.js"></script>
-</body>
-</html>
+@endsection

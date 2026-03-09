@@ -12,30 +12,100 @@
         <link rel="stylesheet" href="resources/css/app.css">
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link rel="shortcut icon" href="resources/images/logo.png" type="image/x-icon">
-        @if(request()->is('login') || request()->is('register'))
+        @if (Request::is('login') || Request::is('register') || Request::is('password/*'))
             <link rel="stylesheet" href="resources/css/login-style.css">
         @endif
     </head>
-    <body class="@if(request()->is('login') || request()->is('register')) auth-page @endif">
-        @if(request()->is('login') || request()->is('register'))
-            <video autoplay muted loop id="auth-bg-video">
-                <source src="resources/images/video1.mp4" type="video/mp4">
-            </video>
-            <div class="auth-bg-overlay"></div>
-        @endif
-        <x-header />
 
-        <main class="py-4">
+
+
+    <body>  
+        <div id="js-preloader" class="js-preloader">
+            <div class="preloader-inner">
+                <span class="dot"></span>
+                <div class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+
+        <header class="header-area header-sticky">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <nav class="main-nav">
+                            <a href="/" class="logo">
+                                <img src="resources/images/logo.png" alt="BR3BAS Motors Logo" style="height:150px;">
+                            </a>
+                            <ul class="nav">
+                                <li><a href="/" class="active">Início</a></li>
+                                <li><a href="/cars">Carros</a></li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                        aria-haspopup="true" aria-expanded="false" href="#">Sobre</a>
+
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="/team">A Nossa Equipa</a>
+                                        <a class="dropdown-item" href="/faq">FAQ</a>
+                                    </div>
+                                </li>
+                                <li><a href="/contact">Contacto</a></li>
+                                
+                                @guest
+                                    <li class="login-item"><a href="{{ route('login') }}"><img src="resources/images/loginPerson.png" alt="Login" style="height:36px;"></a></li>
+                                @else
+                                    <li class="login-item" style="display:flex; align-items:center; gap:8px;">
+                                        <span style="color:#fff;">Olá, {{ Auth::user()->name }}</span>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:inline; margin:0;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link" style="color:#fff; padding:0;">Sair</button>
+                                        </form>
+                                    </li>
+                                @endguest
+                            </ul>
+                            <a class='menu-trigger'>
+                                <span>Menu</span>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <main>
             @yield('content')
         </main>
 
-        <x-footer />
 
+        @if (Request::is('login') || Request::is('register') || Request::is('password/*'))
+            <footer style="display:none;"></footer>
+            <script src="resources/js/login.js"></script>
+        @else
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p>Copyright © 2026 Br3basMotors. Todos os direitos reservados.<br></p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        @endif
+
+        
         <script src="resources/js/jquery-2.1.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="resources/js/popper.js"></script>
         <script src="resources/js/bootstrap.min.js"></script>
-        @if(request()->is('login') || request()->is('register'))
-            <script src="resources/js/login.js"></script>
-        @endif
+        <script src="resources/js/scrollreveal.min.js"></script>
+        <script src="resources/js/waypoints.min.js"></script>
+        <script src="resources/js/jquery.counterup.min.js"></script>
+        <script src="resources/js/imgfix.min.js"></script>
+        <script src="resources/js/mixitup.js"></script>
+        <script src="resources/js/accordions.js"></script>
+        <script src="resources/js/custom.js"></script>
     </body>
 </html>

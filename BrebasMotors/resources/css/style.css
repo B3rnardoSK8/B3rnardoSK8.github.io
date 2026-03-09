@@ -633,7 +633,7 @@ html, body {
 }
 
 /* Reserve space for the fixed header so page content isn't covered */
-body > main, .container, .main-banner {
+body > main {
   padding-top: 80px;
 }
 
