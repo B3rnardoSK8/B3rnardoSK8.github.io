@@ -315,6 +315,7 @@ header
   transition: all 0.3s ease 0s;
   position: relative;
   z-index: 999;
+  align-items: center;
 }
 
 .header-area .main-nav .nav li {
@@ -342,6 +343,48 @@ header
   color: #fff;
 }
 
+.header-area .main-nav .nav li.auth-switch-item {
+  padding-left: 12px;
+  padding-right: 0;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.header-area .main-nav .nav li .auth-switch {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  gap: 8px;
+  height: 40px;
+  padding: 0;
+  transform: translateY(0);
+}
+
+.header-area .main-nav .nav li .auth-switch a {
+  display: inline-block !important;
+  height: auto !important;
+  line-height: 40px !important;
+  color: #fff !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  font-size: 12px !important;
+  font-weight: 500;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.header-area .main-nav .nav li .auth-switch .auth-divider {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.header-area .main-nav .nav li .auth-switch a:hover {
+  color: #ed563b !important;
+}
+
 .header-area .main-nav .nav li:hover>a,
 .header-area .main-nav .nav li>a.active {
   color: #ed563b !important;
@@ -352,6 +395,14 @@ header
 .background-header .main-nav .nav li>a.active {
   color: #ed563b !important;
   opacity: 1;
+}
+
+.background-header .main-nav .nav li .auth-switch a {
+  color: #232d39 !important;
+}
+
+.background-header .main-nav .nav li .auth-switch .auth-divider {
+  color: rgba(35, 45, 57, 0.45);
 }
 
 .header-area .main-nav .menu-trigger {
@@ -568,6 +619,30 @@ header
   .header-area .main-nav .nav li a:hover {
     background: #ececec !important;
     color: #ed563b !important;
+  }
+
+  .header-area .main-nav .nav li.auth-switch-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0 !important;
+  }
+
+  .header-area .main-nav .nav li .auth-switch {
+    height: auto;
+    padding: 0;
+    transform: none;
+  }
+
+  .header-area .main-nav .nav li .auth-switch a {
+    font-size: 12px !important;
+    color: #232d39 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+  }
+
+  .header-area .main-nav .nav li .auth-switch .auth-divider {
+    color: rgba(35, 45, 57, 0.45);
   }
 
   .header-area .main-nav .nav li.submenu ul {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -18,9 +19,8 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/contact', function () {
-    return view('contact');
-});
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 Route::get('/team', function () {
     return view('team');
@@ -34,18 +34,21 @@ Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
 Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
 
 // Manual auth routes (login, register, password reset, email verification)
-Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [AuthController::class, 'login']);
 
-Route::get('register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('register', [AuthController::class, 'register']);
+    Route::get('register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('register', [AuthController::class, 'register']);
 
-// Password Reset Routes
-Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+    // Password Reset Routes
+    Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+});
+
+Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Email Verification Routes
 Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');

@@ -74,26 +74,51 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-xs-12">
                     <div class="contact-form section-bg" style="background-image: url('resources/images/contact-1-720x480.jpg')">
-                        <form id="contact" action="" method="post">
+                        @if(session('contact_success'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('contact_success') }}
+                            </div>
+                        @endif
+
+                        @if($errors->has('contact'))
+                            <div class="alert alert-danger" role="alert">
+                                {{ $errors->first('contact') }}
+                            </div>
+                        @endif
+
+                        <form id="contact" action="{{ route('contact.send') }}" method="post">
+                          @csrf
                           <div class="row">
                             <div class="col-md-6 col-sm-12">
                               <fieldset>
-                                <input name="name" type="text" id="name" placeholder="Nome*" required="">
+                                <input name="name" type="text" id="name" placeholder="Nome*" value="{{ old('name') }}" required="">
+                                @error('name')
+                                  <small class="text-danger">{{ $message }}</small>
+                                @enderror
                               </fieldset>
                             </div>
                             <div class="col-md-6 col-sm-12">
                               <fieldset>
-                                <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*" placeholder="Email*" required="">
+                                <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*" placeholder="Email*" value="{{ old('email') }}" required="">
+                                @error('email')
+                                  <small class="text-danger">{{ $message }}</small>
+                                @enderror
                               </fieldset>
                             </div>
                             <div class="col-md-12 col-sm-12">
                               <fieldset>
-                                <input name="subject" type="text" id="subject" placeholder="Assunto">
+                                <input name="subject" type="text" id="subject" placeholder="Assunto" value="{{ old('subject') }}">
+                                @error('subject')
+                                  <small class="text-danger">{{ $message }}</small>
+                                @enderror
                               </fieldset>
                             </div>
                             <div class="col-lg-12">
                               <fieldset>
-                                <textarea name="message" rows="6" id="message" placeholder="Mensagem" required=""></textarea>
+                                <textarea name="message" rows="6" id="message" placeholder="Mensagem" required="">{{ old('message') }}</textarea>
+                                @error('message')
+                                  <small class="text-danger">{{ $message }}</small>
+                                @enderror
                               </fieldset>
                             </div>
                             <div class="col-lg-12">

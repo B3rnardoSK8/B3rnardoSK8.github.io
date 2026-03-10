@@ -54,7 +54,13 @@
                                 <li><a href="/contact">Contacto</a></li>
                                 
                                 @guest
-                                    <li class="login-item"><a href="{{ route('login') }}"><img src="resources/images/loginPerson.png" alt="Login" style="height:36px;"></a></li>
+                                    <li class="login-item auth-switch-item">
+                                        <div class="auth-switch">
+                                            <a href="{{ route('register') }}">Criar conta</a>
+                                            <span class="auth-divider" aria-hidden="true">|</span>
+                                            <a href="{{ route('login') }}">Iniciar sessão</a>
+                                        </div>
+                                    </li>
                                 @else
                                     <li class="login-item" style="display:flex; align-items:center; gap:8px;">
                                         <span style="color:#fff;">Olá, {{ Auth::user()->name }}</span>
