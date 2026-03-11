@@ -78,7 +78,7 @@
                                             <a class="dropdown-item" href="{{ route('account.favorites') }}">Favoritos</a>
                                             <form action="{{ route('logout') }}" method="POST" class="profile-logout-form">
                                                 @csrf
-                                                <a href="#" class="dropdown-item" onclick="this.closest('form').submit();">Sair</a>
+                                                <button type="submit" class="dropdown-item logout-button">Sair</button>
                                             </form>
                                         </div>
                                     </li>

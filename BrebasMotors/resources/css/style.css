@@ -469,6 +469,7 @@ header
   text-align: left;
   border: 0;
   background: transparent;
+  color: #fff;
   appearance: none;
   -webkit-appearance: none;
   font: inherit;
@@ -756,6 +757,10 @@ header
     letter-spacing: 1px;
   }
 
+  .header-area .main-nav .nav li .profile-logout-form .dropdown-item {
+    color: #fff;
+  }
+
   .header-area .main-nav .nav li .profile-dropdown-menu .dropdown-item:hover {
     color: #ed563b;
     background: #ececec;
@@ -806,27 +811,6 @@ header
   }
 }
 
-
-/* Small top-gap fix: ensure no unexpected white gap at top
-   - remove default margins, fix header at top and reserve space for it
-   This is minimal and can be reverted if undesired. */
-html, body {
-  margin: 0;
-  padding: 0;
-}
-
-.header-area {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-}
-
-/* Reserve space for the fixed header so page content isn't covered */
-body > main {
-  padding-top: 80px;
-}
 
 /*
 ---------------------------------------------
@@ -1652,4 +1636,135 @@ html {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
+}
+
+/*
+---------------------------------------------
+Account Settings Glass Layout
+---------------------------------------------
+*/
+
+.account-settings-page {
+  position: relative;
+  min-height: 100vh;
+  padding: 120px 0 70px;
+  overflow: hidden;
+  background: #0f1720;
+}
+
+.account-settings-bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.account-settings-bg-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(9, 9, 11, 0.45) 0%, rgba(9, 9, 11, 0.72) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.account-settings-section {
+  position: relative;
+  z-index: 2;
+}
+
+.account-settings-card {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  padding: 30px;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.account-settings-header {
+  margin-bottom: 22px;
+}
+
+.account-settings-header h2 {
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.account-settings-header p {
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 0;
+}
+
+.account-settings-alert {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.2);
+  color: #dcfce7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  font-weight: 500;
+}
+
+.account-settings-photo-col {
+  margin-bottom: 20px;
+}
+
+.account-settings-photo {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+
+.account-settings-photo-field {
+  margin-top: 12px;
+}
+
+.account-settings-photo-label,
+.account-settings-card .form-group label {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.account-settings-card .form-control {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+}
+
+.account-settings-card .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.account-settings-card .form-control:focus {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: #ed563b;
+  box-shadow: 0 0 0 0.2rem rgba(237, 86, 59, 0.22);
+  color: #ffffff;
+}
+
+.account-settings-invalid {
+  display: block;
+  color: #fecaca;
+}
+
+.account-settings-submit {
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .account-settings-page {
+    padding-top: 100px;
+  }
+
+  .account-settings-card {
+    padding: 22px;
+  }
 }
