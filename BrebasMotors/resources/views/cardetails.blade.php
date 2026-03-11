@@ -116,7 +116,7 @@
 
                     <div class="row">   
                         <div class="col-sm-6">
-                            <label>Nome</label>
+                            <label>Vendedor:</label>
 
                             <p>Bernardo Ângelo</p>
                         </div>
@@ -128,7 +128,7 @@
                         <div class="col-sm-6">
                             <label>Email</label>
 
-                            <p><a href="mailto:2025a102186@aerp.pt">2025a102186@aerp.pt</a></p>
+                            <p><a href="mailto:bernardo.angelo@br3basmotors.pt">bernardo.angelo@br3basmotors.pt</a></p>
                         </div>
                     </div>
                   </article>

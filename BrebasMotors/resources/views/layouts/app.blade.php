@@ -62,12 +62,25 @@
                                         </div>
                                     </li>
                                 @else
-                                    <li class="login-item" style="display:flex; align-items:center; gap:8px;">
-                                        <span style="color:#fff;">Olá, {{ Auth::user()->name }}</span>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:inline; margin:0;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-link" style="color:#fff; padding:0;">Sair</button>
-                                        </form>
+                                    <li class="dropdown profile-menu-item">
+                                        @php
+                                            $headerProfilePhoto = Auth::user()->profile_photo_path
+                                                ? asset(Auth::user()->profile_photo_path)
+                                                : asset('resources/images/loginPerson.png');
+                                        @endphp
+                                        <a class="dropdown-toggle profile-menu-toggle" data-toggle="dropdown" role="button"
+                                            aria-haspopup="true" aria-expanded="false" href="#" title="Conta">
+                                            <img src="{{ $headerProfilePhoto }}" alt="Foto de perfil" class="profile-avatar"
+                                            width="36" height="36" style="width:36px; height:36px; min-width:36px; max-width:36px; object-fit:cover; border-radius:50%;">
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right profile-dropdown-menu">
+                                            <a class="dropdown-item" href="{{ route('account.settings') }}">Definições</a>
+                                            <a class="dropdown-item" href="{{ route('account.favorites') }}">Favoritos</a>
+                                            <form action="{{ route('logout') }}" method="POST" class="profile-logout-form">
+                                                @csrf
+                                                <a href="#" class="dropdown-item" onclick="this.closest('form').submit();">Sair</a>
+                                            </form>
+                                        </div>
                                     </li>
                                 @endguest
                             </ul>

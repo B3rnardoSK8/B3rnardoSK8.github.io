@@ -3,6 +3,7 @@
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AccountSettingsController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
@@ -49,6 +50,12 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+    Route::get('definicoes', [AccountSettingsController::class, 'edit'])->name('account.settings');
+    Route::put('definicoes', [AccountSettingsController::class, 'update'])->name('account.settings.update');
+    Route::view('favoritos', 'account.favorites')->name('account.favorites');
+});
 
 // Email Verification Routes
 Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');

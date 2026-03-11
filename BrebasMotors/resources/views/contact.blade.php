@@ -34,7 +34,7 @@
                         <i class="fa fa-phone"></i>
                     </div>
 
-                    <h5><a>+351 911 787 311</a></h5>
+                    <h5><a>+351 262 787 311</a></h5>
 
                     <br>
                 </div>
@@ -44,7 +44,7 @@
                         <i class="fa fa-envelope"></i>
                     </div>
 
-                    <h5><a href="mailto:2025a102186@aerp.pt">2025a102186@aerp.pt</a></h5>
+                    <h5><a href="mailto:support@br3basmotors.com">support@br3basmotors.com</a></h5>
 
                     <br>
                 </div>
