@@ -410,13 +410,22 @@ header
   align-items: center;
 }
 
+.header-area .main-nav .nav li .profile-menu-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .header-area .main-nav .nav li .profile-menu-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
   height: 40px;
   line-height: 40px;
+}
+
+.header-area .main-nav .nav li .profile-menu-toggle::after {
+  display: none;
 }
 
 .header-area .main-nav .nav li .profile-avatar {
@@ -434,6 +443,34 @@ header
 
 .background-header .main-nav .nav li .profile-avatar {
   border-color: rgba(35, 45, 57, 0.6);
+}
+
+.header-area .main-nav .nav li .profile-header-logout-form {
+  margin: 0;
+}
+
+.header-area .main-nav .nav li .profile-header-logout-button {
+  height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 40px;
+  text-transform: uppercase;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.header-area .main-nav .nav li .profile-header-logout-button:hover,
+.header-area .main-nav .nav li .profile-header-logout-button:focus {
+  color: #ed563b;
+  outline: none;
+}
+
+.background-header .main-nav .nav li .profile-header-logout-button {
+  color: #232d39;
 }
 
 .header-area .main-nav .nav li .profile-dropdown-menu {
@@ -725,11 +762,24 @@ header
     padding: 0 !important;
   }
 
-  .header-area .main-nav .nav li .profile-menu-toggle {
+  .header-area .main-nav .nav li .profile-menu-actions {
     width: 100%;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 15px;
+  }
+
+  .header-area .main-nav .nav li .profile-menu-toggle {
     height: 50px !important;
     line-height: 50px !important;
     background: #ececec !important;
+  }
+
+  .header-area .main-nav .nav li .profile-header-logout-button {
+    height: 50px;
+    padding: 0;
+    color: #232d39;
+    line-height: 50px;
   }
 
   .header-area .main-nav .nav li .profile-avatar {
