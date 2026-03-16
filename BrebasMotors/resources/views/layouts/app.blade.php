@@ -64,8 +64,9 @@
                                 @else
                                     <li class="dropdown profile-menu-item">
                                         @php
-                                            $headerProfilePhoto = Auth::user()->profile_photo_path
-                                                ? asset(Auth::user()->profile_photo_path)
+                                            $currentUser = Auth::user();
+                                            $headerProfilePhoto = $currentUser->profile_photo_path
+                                                ? asset($currentUser->profile_photo_path)
                                                 : asset('resources/images/loginPerson.png');
                                         @endphp
                                         <div class="profile-menu-actions">
@@ -77,6 +78,9 @@
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="{{ route('account.settings') }}">Definições</a>
                                                 <a class="dropdown-item" href="{{ route('account.favorites') }}">Favoritos</a>
+                                                @if ((int) $currentUser->tipo_id === 1)
+                                                    <a class="dropdown-item" href="{{ route('back.dashboard') }}">Dashboard</a>
+                                                @endif
                                             </div>
                                             <form action="{{ route('logout') }}" method="POST" class="profile-header-logout-form">
                                                 @csrf

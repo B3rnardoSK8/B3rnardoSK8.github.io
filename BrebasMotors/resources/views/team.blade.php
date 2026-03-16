@@ -28,7 +28,7 @@
                         <div class="down-content">
                             <span>CEO</span>
                             <h4>Bernardo Ângelo</h4>
-                            <p>19 anos<br>Caldas da Rainha<br>Estudante da Escola Secundária Raúl Proença<br>Curso Técnico de Gestão e Programação de Sistemas Informáticos</p>
+                            <p>19 anos<br>Caldas da Rainha<br>Estudante da Escola Secundária Raúl Proença<br>Técnico de Gestão e Programação de Sistemas Informáticos</p>
                             <ul class="social-icons">
                                 <li><a href="https://www.facebook.com/share/1AEzaSqaEV/?mibextid=wwXlfr"><i class="fa fa-facebook"></i></a></li>
                             </ul>

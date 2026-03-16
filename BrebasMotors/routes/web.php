@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Models\Car;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,6 +56,11 @@ Route::middleware('auth')->group(function () {
     Route::get('definicoes', [AccountSettingsController::class, 'edit'])->name('account.settings');
     Route::put('definicoes', [AccountSettingsController::class, 'update'])->name('account.settings.update');
     Route::view('favoritos', 'account.favorites')->name('account.favorites');
+    Route::get('back/dashboard', function () {
+        abort_unless((int) Auth::user()->tipo_id === 1, 403);
+
+        return view('back.dashboard');
+    })->name('back.dashboard');
 });
 
 // Email Verification Routes
