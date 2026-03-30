@@ -242,3 +242,43 @@ body.backoffice-theme .navbar .navbar-toggler .mdi {
     padding: 1rem;
   }
 }
+
+/* Hard overrides for PlusAdmin defaults (blue/pink) */
+body.backoffice-theme .navbar .navbar-menu-wrapper,
+body.backoffice-theme .navbar.navbar-primary .navbar-menu-wrapper,
+body.backoffice-theme .navbar.navbar-dark .navbar-menu-wrapper,
+body.backoffice-theme .navbar.default-layout-navbar .navbar-menu-wrapper {
+  background: #232d39 !important;
+  color: #ffffff !important;
+}
+
+body.backoffice-theme .navbar .navbar-menu-wrapper .navbar-toggler {
+  background: #ed563b !important;
+  color: #ffffff !important;
+  z-index: 1200;
+  pointer-events: auto;
+}
+
+@media (max-width: 991px) {
+  body.backoffice-theme .navbar .navbar-menu-wrapper .navbar-toggler {
+    background: transparent !important;
+  }
+}
+
+body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item.active,
+body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item:hover {
+  background: transparent !important;
+}
+
+body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item.active > .nav-link,
+body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item:hover > .nav-link {
+  background: rgba(237, 86, 59, 0.14) !important;
+  color: #232d39 !important;
+}
+
+body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item.active > .nav-link .menu-icon,
+body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item.active > .nav-link .menu-title,
+body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item:hover > .nav-link .menu-icon,
+body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item:hover > .nav-link .menu-title {
+  color: #ed563b !important;
+}

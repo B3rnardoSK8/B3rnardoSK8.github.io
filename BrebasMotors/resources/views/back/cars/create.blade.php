@@ -7,8 +7,13 @@
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-1">Adicionar Veículo</h4>
-                <p class="text-muted mb-4">Preencha os dados para adicionar um novo veículo ao catálogo.</p>
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h4 class="card-title mb-1">Adicionar Veículo</h4>
+                        <p class="text-muted mb-4">Preencha os dados para adicionar um novo veículo ao catálogo.</p>
+                    </div>
+                    <a href="{{ route('back.cars.index') }}" class="btn btn-light btn-sm">Voltar</a>
+                </div>
 
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -29,13 +34,6 @@
                             <input type="text" name="title" class="form-control" value="{{ old('title') }}" placeholder="Ex.: BMW M3 Competition" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Estado *</label>
-                            <select name="is_new" class="form-select" required>
-                                <option value="1" @selected(old('is_new', '0') === '1')>Novo</option>
-                                <option value="0" @selected(old('is_new', '0') === '0')>Usado</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
                             <label class="form-label">Segmento</label>
                             <input type="text" name="segment" class="form-control" value="{{ old('segment') }}" placeholder="Ex.: Sedan">
                         </div>
@@ -48,12 +46,20 @@
                             <input type="text" name="model" class="form-control" value="{{ old('model') }}" placeholder="Ex.: M3" required>
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label class="form-label">Ano *</label>
+                            <input type="number" name="year" class="form-control" value="{{ old('year') }}" min="1900" max="{{ now()->year + 1 }}" placeholder="Ex.: 2022" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label class="form-label">Preço (EUR) *</label>
                             <input type="number" step="0.01" min="0" name="price" class="form-control" value="{{ old('price') }}" placeholder="Ex.: 85000" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Quilometragem *</label>
-                            <input type="number" min="0" name="mileage" class="form-control" value="{{ old('mileage', 0) }}" required>
+                            <input type="number" id="mileageInput" min="0" name="mileage" class="form-control" value="{{ old('mileage', 0) }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Estado</label>
+                            <input type="text" id="conditionLabel" class="form-control" value="{{ (int) old('mileage', 0) === 0 ? 'Novo' : 'Usado' }}" readonly>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Motor</label>
@@ -73,7 +79,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Portas</label>
-                            <input type="number" min="1" name="doors" class="form-control" value="{{ old('doors') }}" placeholder="Ex.: 4">
+                            <input type="number" min="1" name="doors" class="form-control" value="{{ old('doors') }}" placeholder="Ex.: 5">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Lugares</label>
@@ -97,7 +103,7 @@
 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <a href="{{ route('back.cars.index') }}" class="btn btn-light">Voltar</a>
+                        <a href="{{ route('back.cars.index') }}" class="btn btn-light">Cancelar</a>
                     </div>
                 </form>
             </div>
@@ -107,11 +113,22 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const mileageInput = document.getElementById('mileageInput');
+    const conditionLabel = document.getElementById('conditionLabel');
     const imageInput = document.getElementById('imageInput');
     const galleryContainer = document.getElementById('galleryContainer');
     const imageOrderInput = document.getElementById('imageOrder');
     let newImages = [];
     let draggedElement = null;
+
+    function updateConditionFromMileage() {
+        const mileage = parseInt(mileageInput.value || '0', 10);
+        const isNew = Number.isNaN(mileage) || mileage <= 0;
+        conditionLabel.value = isNew ? 'Novo' : 'Usado';
+    }
+
+    mileageInput.addEventListener('input', updateConditionFromMileage);
+    updateConditionFromMileage();
 
     // Handle file input change
     imageInput.addEventListener('change', function (e) {
@@ -252,3 +269,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+    @endsection

@@ -93,6 +93,11 @@
                        </div>
 
                        <div class="col-sm-6">
+                         <label>Ano</label>
+                         <p>{{ $car->year ?? '-' }}</p>
+                       </div>
+
+                       <div class="col-sm-6">
                          <label>Segmento</label>
                          <p>{{ $car->segment ?? '-' }}</p>
                        </div>

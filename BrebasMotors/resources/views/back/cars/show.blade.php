@@ -65,6 +65,7 @@
                                 <tbody>
                                     <tr><th width="180">Marca</th><td>{{ $car->brand }}</td></tr>
                                     <tr><th>Modelo</th><td>{{ $car->model }}</td></tr>
+                                    <tr><th>Ano</th><td>{{ $car->year ?: '-' }}</td></tr>
                                     <tr><th>Estado</th><td>{{ $car->is_new ? 'Novo' : 'Usado' }}</td></tr>
                                     <tr><th>Preço</th><td>{{ number_format((float) $car->price, 0, ',', '.') }} EUR</td></tr>
                                     <tr><th>Quilometragem</th><td>{{ number_format((int) $car->mileage, 0, ',', '.') }} km</td></tr>

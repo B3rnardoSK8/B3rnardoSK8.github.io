@@ -158,6 +158,7 @@ class CarController extends Controller
             'segment',
             'brand',
             'model',
+            'year',
             'price_max',
             'mileage_max',
             'engine',
@@ -166,6 +167,7 @@ class CarController extends Controller
             'transmission',
             'doors',
             'seats',
+            'sort_by',
         ]);
 
         $query = Car::query();
@@ -178,6 +180,10 @@ class CarController extends Controller
             if ($request->filled($field)) {
                 $query->where($field, $request->input($field));
             }
+        }
+
+        if ($request->filled('year')) {
+            $query->where('year', (int) $request->input('year'));
         }
 
         if ($request->filled('transmission')) {
@@ -204,8 +210,28 @@ class CarController extends Controller
             }
         }
 
+        $sortBy = $request->input('sort_by', 'price_desc');
+
+        switch ($sortBy) {
+            case 'year':
+                $query->orderByDesc('year')->orderByDesc('id');
+                break;
+            case 'price_asc':
+                $query->orderBy('price')->orderByDesc('id');
+                break;
+            case 'mileage_asc':
+                $query->orderBy('mileage')->orderByDesc('id');
+                break;
+            case 'mileage_desc':
+                $query->orderByDesc('mileage')->orderByDesc('id');
+                break;
+            case 'price_desc':
+            default:
+                $query->orderByDesc('price')->orderByDesc('id');
+                break;
+        }
+
         $cars = $query
-            ->orderByDesc('price')
             ->paginate(9)
             ->appends($filters);
 
@@ -222,6 +248,7 @@ class CarController extends Controller
             'segments' => Car::select('segment')->whereNotNull('segment')->distinct()->orderBy('segment')->pluck('segment'),
             'brands' => Car::select('brand')->distinct()->orderBy('brand')->pluck('brand'),
             'models' => $modelOptions,
+            'years' => Car::select('year')->whereNotNull('year')->distinct()->orderByDesc('year')->pluck('year'),
             'fuels' => Car::select('fuel')->whereNotNull('fuel')->distinct()->orderBy('fuel')->pluck('fuel'),
             'transmissions' => collect(['Automática', 'Manual']),
             'prices' => collect([50000, 100000, 150000, 250000, 500000]),
@@ -255,16 +282,90 @@ class CarController extends Controller
         return view('back.cars.create');
     }
 
+    public function highlights()
+    {
+        $this->ensureAdmin();
+
+        $cars = Car::query()
+            ->orderByDesc('is_featured')
+            ->orderByRaw('featured_order IS NULL')
+            ->orderBy('featured_order')
+            ->orderByDesc('id')
+            ->paginate(20);
+
+        return view('back.cars.highlights', [
+            'cars' => $cars,
+            'featuredIds' => Car::query()
+                ->where('is_featured', true)
+                ->orderByRaw('featured_order IS NULL')
+                ->orderBy('featured_order')
+                ->orderByDesc('id')
+                ->pluck('id')
+                ->map(fn ($id) => (int) $id)
+                ->all(),
+        ]);
+    }
+
+    public function updateHighlights(Request $request)
+    {
+        $this->ensureAdmin();
+
+        $data = $request->validate([
+            'featured_ids' => ['nullable', 'array', 'max:3'],
+            'featured_ids.*' => ['integer', 'distinct', 'exists:cars,id'],
+            'featured_order' => ['nullable', 'string'],
+        ]);
+
+        $featuredIds = collect($data['featured_ids'] ?? [])
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->take(3)
+            ->values();
+
+        $requestedOrder = collect(explode(',', (string) ($data['featured_order'] ?? '')))
+            ->filter(fn ($id) => $id !== '')
+            ->map(fn ($id) => (int) $id)
+            ->unique();
+
+        $orderedFeaturedIds = $requestedOrder
+            ->filter(fn ($id) => $featuredIds->contains($id))
+            ->concat($featuredIds->diff($requestedOrder))
+            ->take(3)
+            ->values();
+
+        Car::query()->update([
+            'is_featured' => false,
+            'featured_order' => null,
+        ]);
+
+        if ($orderedFeaturedIds->isNotEmpty()) {
+            foreach ($orderedFeaturedIds as $index => $carId) {
+                Car::query()
+                    ->where('id', $carId)
+                    ->update([
+                        'is_featured' => true,
+                        'featured_order' => $index + 1,
+                    ]);
+            }
+        }
+
+        return redirect()
+            ->route('back.cars.highlights')
+            ->with('status', 'Destaques atualizados com sucesso.');
+    }
+
     public function store(Request $request)
     {
         $this->ensureAdmin();
 
+        $maxYear = (int) date('Y') + 1;
+
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'is_new' => ['required', 'boolean'],
             'segment' => ['nullable', 'string', 'max:255'],
             'brand' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
+            'year' => ['required', 'integer', 'min:1900', 'max:'.$maxYear],
             'price' => ['required', 'numeric', 'min:0'],
             'mileage' => ['required', 'integer', 'min:0'],
             'engine' => ['nullable', 'string', 'max:255'],
@@ -279,14 +380,17 @@ class CarController extends Controller
             'image_order' => ['nullable', 'string'],
         ]);
 
+        $mileage = (int) $request->input('mileage');
+
         $car = new Car();
         $car->title = $request->input('title');
-        $car->is_new = (bool) $request->input('is_new');
+        $car->is_new = $mileage === 0;
         $car->segment = $request->input('segment');
         $car->brand = $request->input('brand');
         $car->model = $request->input('model');
+        $car->year = $request->input('year');
         $car->price = $request->input('price');
-        $car->mileage = $request->input('mileage');
+        $car->mileage = $mileage;
         $car->engine = $request->input('engine');
         $car->power = $request->input('power');
         $car->fuel = $request->input('fuel');
@@ -370,14 +474,16 @@ class CarController extends Controller
     {
         $this->ensureAdmin();
 
+        $maxYear = (int) date('Y') + 1;
+
         $existingImages = $this->normalizeImages($car);
 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'is_new' => ['required', 'boolean'],
             'segment' => ['nullable', 'string', 'max:255'],
             'brand' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
+            'year' => ['required', 'integer', 'min:1900', 'max:'.$maxYear],
             'price' => ['required', 'numeric', 'min:0'],
             'mileage' => ['required', 'integer', 'min:0'],
             'engine' => ['nullable', 'string', 'max:255'],
@@ -394,13 +500,16 @@ class CarController extends Controller
             'image_order' => ['nullable', 'string'],
         ]);
 
+        $mileage = (int) $request->input('mileage');
+
         $car->title = $request->input('title');
-        $car->is_new = (bool) $request->input('is_new');
+        $car->is_new = $mileage === 0;
         $car->segment = $request->input('segment');
         $car->brand = $request->input('brand');
         $car->model = $request->input('model');
+        $car->year = $request->input('year');
         $car->price = $request->input('price');
-        $car->mileage = $request->input('mileage');
+        $car->mileage = $mileage;
         $car->engine = $request->input('engine');
         $car->power = $request->input('power');
         $car->fuel = $request->input('fuel');

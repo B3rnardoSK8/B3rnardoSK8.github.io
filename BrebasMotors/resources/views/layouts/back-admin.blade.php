@@ -49,6 +49,22 @@
     <script src="{{ asset('plusadmin/assets/js/hoverable-collapse.js') }}"></script>
     <script src="{{ asset('plusadmin/assets/js/proBanner.js') }}"></script>
     <script src="{{ asset('plusadmin/assets/js/dashboard.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const body = document.body;
+            const toggles = document.querySelectorAll('[data-toggle="minimize"]');
+
+            toggles.forEach(function (toggle) {
+                toggle.addEventListener('click', function () {
+                    if (body.classList.contains('sidebar-toggle-display') || body.classList.contains('sidebar-absolute')) {
+                        body.classList.toggle('sidebar-hidden');
+                    } else {
+                        body.classList.toggle('sidebar-icon-only');
+                    }
+                });
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

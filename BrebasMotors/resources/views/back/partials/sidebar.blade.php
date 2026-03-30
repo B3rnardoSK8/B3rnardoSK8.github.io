@@ -1,13 +1,17 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     @php
-        $profileImage = Auth::user()?->profile_photo_path ?: 'resources/images/car.png';
+        $currentUser = Auth::user();
+        $profileImage = $currentUser?->profile_photo_path
+            ? asset($currentUser->profile_photo_path)
+            : asset('resources/images/loginPerson.png');
     @endphp
 
     <ul class="nav">
         <li class="nav-item nav-profile border-bottom">
-            <a href="#" class="nav-link flex-column">
+            <a class="nav-link flex-column">
                 <div class="nav-profile-image">
-                    <img src="{{ asset($profileImage) }}" alt="profile">
+                    <img src="{{ $profileImage }}" alt="Foto de perfil" class="profile-avatar"
+                    width="65" height="65" style="width:65px; height:65px; min-width:65px; max-width:65px; object-fit:cover; border-radius:50%;">
                 </div>
                 <div class="nav-profile-text d-flex ms-0 mb-3 flex-column">
                     <span class="fw-semibold mb-1 mt-2 text-center">{{ Auth::user()->name ?? 'Administrador' }}</span>
@@ -28,6 +32,12 @@
             <a class="nav-link" href="{{ route('back.cars.index') }}">
                 <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                 <span class="menu-title">Veículos</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('back.cars.highlights') }}">
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                <span class="menu-title">Destaques</span>
             </a>
         </li>
         @if ((int) (Auth::id() ?? 0) === 1)

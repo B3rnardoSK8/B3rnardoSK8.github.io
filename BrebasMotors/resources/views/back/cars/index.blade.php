@@ -12,7 +12,10 @@
                         <h4 class="card-title mb-1">Lista de Veículos</h4>
                         <p class="text-muted mb-0">Gestão do catálogo de veículos</p>
                     </div>
-                    <a href="{{ route('back.cars.create') }}" class="btn btn-primary btn-sm">Adicionar Veículo</a>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="{{ route('back.cars.create') }}" class="btn btn-primary btn-sm">Adicionar Veículo</a>
+                        <a href="{{ route('back.dashboard') }}" class="btn btn-light btn-sm">Voltar</a>
+                    </div>
                 </div>
 
                 @if (session('status'))
@@ -28,6 +31,7 @@
                                 <th>ID</th>
                                 <th>Marca</th>
                                 <th>Modelo</th>
+                                <th>Ano</th>
                                 <th>Preço</th>
                                 <th>Combustível</th>
                                 <th>Estado</th>
@@ -40,6 +44,7 @@
                                     <td>{{ $car->id }}</td>
                                     <td>{{ $car->brand }}</td>
                                     <td>{{ $car->model }}</td>
+                                    <td>{{ $car->year ?? '-' }}</td>
                                     <td>{{ number_format((float) $car->price, 0, ',', '.') }} EUR</td>
                                     <td>{{ $car->fuel ?? '-' }}</td>
                                     <td>{{ $car->is_new ? 'Novo' : 'Usado' }}</td>
@@ -57,7 +62,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center text-muted">Sem veículos registados.</td>
+                                    <td colspan="8" class="text-center text-muted">Sem veículos registados.</td>
                                 </tr>
                             @endforelse
                         </tbody>

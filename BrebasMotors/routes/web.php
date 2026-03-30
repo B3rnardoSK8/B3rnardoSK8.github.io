@@ -13,12 +13,26 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $featuredCars = Car::whereIn('id', [1, 2, 3])
-        ->orderBy('id')
+    $featuredCars = Car::query()
+        ->where('is_featured', true)
+        ->orderByRaw('featured_order IS NULL')
+        ->orderBy('featured_order')
+        ->orderByDesc('id')
+        ->limit(3)
         ->get();
 
+    if ($featuredCars->count() < 3) {
+        $fallbackCars = Car::query()
+            ->whereNotIn('id', $featuredCars->pluck('id'))
+            ->orderByDesc('id')
+            ->limit(3 - $featuredCars->count())
+            ->get();
+
+        $featuredCars = $featuredCars->concat($fallbackCars);
+    }
+
     return view('home', [
-        'featuredCars' => $featuredCars,
+        'featuredCars' => $featuredCars->values(),
     ]);
 });
 
@@ -62,6 +76,9 @@ Route::middleware('auth')->group(function () {
 
         return view('back.dashboard');
     })->name('back.dashboard');
+
+    Route::get('back/cars/highlights', [CarController::class, 'highlights'])->name('back.cars.highlights');
+    Route::put('back/cars/highlights', [CarController::class, 'updateHighlights'])->name('back.cars.highlights.update');
 
     Route::resource('back/cars', CarController::class)
         ->names('back.cars')

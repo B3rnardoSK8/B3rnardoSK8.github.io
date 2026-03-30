@@ -14,9 +14,12 @@ class Car extends Model
     protected $fillable = [
         'title',
         'is_new',
+        'is_featured',
+        'featured_order',
         'segment',
         'brand',
         'model',
+        'year',
         'price',
         'mileage',
         'engine',
@@ -32,6 +35,9 @@ class Car extends Model
 
     protected $casts = [
         'is_new' => 'boolean',
+        'is_featured' => 'boolean',
+        'featured_order' => 'integer',
+        'year' => 'integer',
         'price' => 'decimal:2',
         'mileage' => 'integer',
         'power' => 'integer',

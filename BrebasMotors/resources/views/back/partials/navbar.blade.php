@@ -4,7 +4,9 @@
             <span class="mdi mdi-chevron-double-left"></span>
         </button>
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <span class="fw-bold text-white">Br3basMotors Dashboard</span>
+            <span class="fw-bold text-white d-inline-flex align-items-center gap-2">
+                <img src="{{ asset('resources/images/logo.png') }}" alt="BR3BAS Motors Logo" style="height: 85px; width: auto;">
+            </span>
         </div>
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-logout d-none d-lg-block">

@@ -5,7 +5,7 @@
     @php
         $resolveImagePath = static function (?string $image): string {
             if (!$image) {
-                return 'resources/images/logo.png';
+                return 'resources/images/car.png';
             }
 
             if (str_starts_with($image, 'storage/') || str_starts_with($image, 'resources/')) {
@@ -16,7 +16,7 @@
         };
     @endphp
 
-    <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/banner-image-1-1920x500.jpg')">
+    <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/banner-image1.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
@@ -39,6 +39,22 @@
             <br>
             <div class="contact-form">
                 <form action="{{ route('cars.index') }}" method="GET" id="car-filter-form">
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group text-center">
+                                <label>Ordenar por:</label>
+                                <select name="sort_by" class="form-control" id="sort-by-select">
+                                    <option value="year" {{ ($filters['sort_by'] ?? '') === 'year' ? 'selected' : '' }}>Ano</option>
+                                    <option value="price_asc" {{ ($filters['sort_by'] ?? '') === 'price_asc' ? 'selected' : '' }}>Preço crescente</option>
+                                    <option value="price_desc" {{ ($filters['sort_by'] ?? 'price_desc') === 'price_desc' ? 'selected' : '' }}>Preço decrescente</option>
+                                    <option value="mileage_asc" {{ ($filters['sort_by'] ?? '') === 'mileage_asc' ? 'selected' : '' }}>Kilometros crescentes</option>
+                                    <option value="mileage_desc" {{ ($filters['sort_by'] ?? '') === 'mileage_desc' ? 'selected' : '' }}>Kilometros decrescentes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                             <div class="form-group">
@@ -135,11 +151,13 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="col-sm-4 offset-sm-4">
-                      <div class="main-button text-center">
-                          <button type="submit" class="btn btn-primary" style="width: 100%;">Procurar</button>
-                      </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col-lg-4 col-md-6 col-sm-8 col-12">
+                            <div class="main-button text-center">
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Procurar</button>
+                            </div>
+                        </div>
                     </div>
                     <br><br><br><br>
                 </form>
@@ -195,6 +213,8 @@
 
 <script>
     (function() {
+        const filterForm = document.getElementById('car-filter-form');
+        const sortBySelect = document.getElementById('sort-by-select');
         const brandSelect = document.getElementById('brand-select');
         const modelSelect = document.getElementById('model-select');
         // Parse from a JSON string so the editor won't treat Blade directives as JS
@@ -242,6 +262,12 @@
             modelSelect.value = '';
             populateModels(this.value);
         });
+
+        if (sortBySelect && filterForm) {
+            sortBySelect.addEventListener('change', function () {
+                filterForm.submit();
+            });
+        }
     })();
 </script>
 

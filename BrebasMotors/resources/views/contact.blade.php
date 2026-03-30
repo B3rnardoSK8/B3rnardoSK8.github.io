@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/banner-image-1-1920x500.jpg')">
+    <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/banner-image1.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-xs-12">
-                    <div class="contact-form section-bg" style="background-image: url('resources/images/contact-1-720x480.jpg')">
+                    <div class="contact-form section-bg" style="background-image: url('resources/images/contact.jpg')">
                         @if(session('contact_success'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('contact_success') }}
