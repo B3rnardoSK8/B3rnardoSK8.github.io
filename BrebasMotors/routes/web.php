@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\BackOfficeController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AccountSettingsController;
@@ -61,6 +62,14 @@ Route::middleware('auth')->group(function () {
 
         return view('back.dashboard');
     })->name('back.dashboard');
+
+    Route::resource('back/cars', CarController::class)
+        ->names('back.cars')
+        ->except(['show']);
+    Route::get('back/cars/{car}', [CarController::class, 'show'])->name('back.cars.show');
+
+    Route::get('back/users', [BackOfficeController::class, 'usersIndex'])->name('back.users.index');
+    Route::put('back/users/{user}/tipo', [BackOfficeController::class, 'usersUpdateTipo'])->name('back.users.tipo.update');
 });
 
 // Email Verification Routes

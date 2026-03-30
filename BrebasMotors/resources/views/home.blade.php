@@ -2,6 +2,20 @@
 
 @section('content')
 
+    @php
+        $resolveImagePath = static function (?string $image): string {
+            if (!$image) {
+                return 'resources/images/car.png';
+            }
+
+            if (str_starts_with($image, 'storage/') || str_starts_with($image, 'resources/')) {
+                return $image;
+            }
+
+            return 'storage/images/cars/'.$image;
+        };
+    @endphp
+
     <div class="main-banner" id="top">
         <video autoplay muted loop id="bg-video">
             <source src="resources/images/video1.mp4" type="video/mp4" />
@@ -26,12 +40,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row cars-grid">
                 @forelse($featuredCars ?? [] as $car)
                     <div class="col-lg-4">
                         <a href="{{ route('cars.show', $car) }}" class="trainer-item d-block" style="text-decoration: none; color: inherit;">
                             <div class="image-thumb">
-                                <img src="{{ asset($car->image_path ?? 'resources/images/product-1-720x480.jpg') }}" alt="{{ $car->title }}">
+                                <img src="{{ asset($resolveImagePath($car->image_path)) }}" alt="{{ $car->title }}">
                             </div>
                             <div class="down-content">
                                 <span>
@@ -79,7 +93,7 @@
 
 
     <section class="section section-bg" id="schedule"
-        style="background-image: url('resources/images/car-image-1-1200x600.jpg')">
+        style="background-image: url('resources/images/banner-image.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3">
@@ -101,7 +115,7 @@
     </section>
 
 
-    <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/banner-image-1-1920x500.jpg')">
+    <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/bannerimage2.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">

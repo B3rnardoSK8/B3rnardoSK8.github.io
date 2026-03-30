@@ -89,7 +89,7 @@
                                         </div>
                                     </li>
                                 @endguest
-                            </ul>\+
+                            </ul>
                             <a class='menu-trigger'>
                                 <span>Menu</span>
                             </a>

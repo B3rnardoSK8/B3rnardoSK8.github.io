@@ -1,14 +1,15 @@
-@extends('layouts.app')
+@extends('layouts.back-admin')
+
+@section('title', 'BrebasMotors Admin')
+
+@php
+    $carsCount = \App\Models\Car::count();
+    $usersCount = \App\Models\User::count();
+@endphp
 
 @section('content')
-    <section class="section" style="padding: 120px 0 80px;">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Painel de Administração</h2>
-                    <p>Bem-vindo ao dashboard de administrador.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    @include('back.partials.stats', [
+        'carsCount' => $carsCount,
+        'usersCount' => $usersCount,
+    ])
 @endsection

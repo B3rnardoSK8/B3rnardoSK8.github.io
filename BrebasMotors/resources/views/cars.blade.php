@@ -2,6 +2,20 @@
 
 @section('content')
 
+    @php
+        $resolveImagePath = static function (?string $image): string {
+            if (!$image) {
+                return 'resources/images/logo.png';
+            }
+
+            if (str_starts_with($image, 'storage/') || str_starts_with($image, 'resources/')) {
+                return $image;
+            }
+
+            return 'storage/images/cars/'.$image;
+        };
+    @endphp
+
     <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/banner-image-1-1920x500.jpg')">
         <div class="container">
             <div class="row">
@@ -131,12 +145,12 @@
                 </form>
             </div>
 
-            <div class="row">
+            <div class="row cars-grid">
                 @forelse ($cars as $car)
                     <div class="col-lg-4">
                         <a href="{{ route('cars.show', $car) }}" class="trainer-item d-block" style="text-decoration: none; color: inherit;">
                             <div class="image-thumb">
-                                <img src="{{ asset($car->image_path ?? 'resources/images/product-1-720x480.jpg') }}" alt="{{ $car->title }}">
+                                <img src="{{ asset($resolveImagePath($car->image_path)) }}" alt="{{ $car->title }}">
                             </div>
                             <div class="down-content">
                                 <span>
@@ -165,7 +179,7 @@
                     </div>
                 @empty
                     <div class="col-12">
-                        <div class="alert alert-info text-center">Nenhum carro encontrado para os filtros selecionados.</div>
+                        <div class="alert alert-info text-center">Nenhum carro encontrado.</div>
                     </div>
                 @endforelse
             </div>
@@ -178,9 +192,6 @@
 
         </div>
     </section>
-
-
-@endsection
 
 <script>
     (function() {
@@ -233,3 +244,5 @@
         });
     })();
 </script>
+
+@endsection

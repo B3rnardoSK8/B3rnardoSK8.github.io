@@ -9,6 +9,8 @@ class Car extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'title',
         'is_new',
@@ -24,6 +26,7 @@ class Car extends Model
         'doors',
         'seats',
         'image_path',
+        'images',
         'description',
     ];
 
@@ -34,5 +37,6 @@ class Car extends Model
         'power' => 'integer',
         'doors' => 'integer',
         'seats' => 'integer',
+        'images' => 'array',
     ];
 }

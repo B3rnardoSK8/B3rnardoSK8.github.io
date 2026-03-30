@@ -23,14 +23,41 @@
             <br>
             <br>
 
+                @php
+                    $galleryImages = is_array($car->images) ? $car->images : [];
+                    if ($car->image_path && !in_array($car->image_path, $galleryImages, true)) {
+                        $galleryImages[] = $car->image_path;
+                    }
+
+                  $resolveImagePath = static function (?string $image): string {
+                    if (!$image) {
+                      return 'resources/images/car.png';
+                    }
+
+                    if (str_starts_with($image, 'storage/') || str_starts_with($image, 'resources/')) {
+                      return $image;
+                    }
+
+                    return 'storage/images/cars/'.$image;
+                  };
+
+                    if (count($galleryImages) === 0) {
+                        $galleryImages[] = 'resources/images/car.png';
+                    }
+                @endphp
+
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    @foreach ($galleryImages as $index => $image)
+                      <li data-target="#carouselExampleIndicators" data-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}"></li>
+                    @endforeach
               </ol>
               <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img class="d-block w-100" src="{{ asset($car->image_path ?? 'resources/images/product-1-720x480.jpg') }}" alt="{{ $car->title }}">
-                </div>
+                    @foreach ($galleryImages as $index => $image)
+                      <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                        <img class="d-block w-100" src="{{ asset($resolveImagePath($image)) }}" alt="{{ $car->title }}">
+                      </div>
+                    @endforeach
               </div>
               <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>

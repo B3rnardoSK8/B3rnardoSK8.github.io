@@ -1,0 +1,244 @@
+/* Backoffice theme aligned with BrebasMotors website visual style */
+:root {
+  --bm-primary: #ed563b;
+  --bm-primary-hover: #f9735b;
+  --bm-ink: #232d39;
+  --bm-muted: #7a7a7a;
+  --bm-bg: #f5f5f5;
+  --bm-surface: #ffffff;
+  --bm-border: #e7e7e7;
+  --bm-shadow: 0 10px 24px rgba(35, 45, 57, 0.08);
+}
+
+body.backoffice-theme,
+body.backoffice-theme .container-scroller,
+body.backoffice-theme .page-body-wrapper,
+body.backoffice-theme .content-wrapper {
+  font-family: 'Poppins', sans-serif;
+}
+
+body.backoffice-theme {
+  background: var(--bm-bg);
+  color: var(--bm-ink);
+}
+
+body.backoffice-theme .content-wrapper {
+  background: linear-gradient(180deg, #ffffff 0%, #f6f6f6 65%, #f1f1f1 100%);
+  min-height: calc(100vh - 64px);
+  padding: 1.5rem;
+}
+
+body.backoffice-theme .navbar.default-layout-navbar {
+  background: var(--bm-ink);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+}
+
+body.backoffice-theme .navbar .navbar-brand-wrapper {
+  background: transparent;
+}
+
+body.backoffice-theme .navbar .fw-bold,
+body.backoffice-theme .navbar .mdi {
+  color: #ffffff !important;
+}
+
+body.backoffice-theme .sidebar {
+  background: var(--bm-surface);
+  border-right: 1px solid var(--bm-border);
+  box-shadow: 2px 0 14px rgba(35, 45, 57, 0.06);
+}
+
+body.backoffice-theme .sidebar .nav-item.nav-profile {
+  border-bottom-color: var(--bm-border) !important;
+}
+
+body.backoffice-theme .sidebar .nav .nav-item .nav-link {
+  color: var(--bm-ink);
+  border-radius: 10px;
+  margin: 0.2rem 0.65rem;
+  transition: all 0.2s ease;
+}
+
+body.backoffice-theme .sidebar .nav .nav-item .nav-link .menu-icon,
+body.backoffice-theme .sidebar .nav .nav-item .nav-link .menu-title,
+body.backoffice-theme .sidebar .nav-item-head {
+  color: var(--bm-ink) !important;
+}
+
+body.backoffice-theme .sidebar .nav .nav-item .nav-link:hover {
+  background: rgba(237, 86, 59, 0.1);
+}
+
+body.backoffice-theme .sidebar .nav .nav-item.active > .nav-link,
+body.backoffice-theme .sidebar .nav .nav-item .nav-link.active {
+  background: rgba(237, 86, 59, 0.14);
+}
+
+body.backoffice-theme .sidebar .nav .nav-item .nav-link:hover .menu-icon,
+body.backoffice-theme .sidebar .nav .nav-item .nav-link:hover .menu-title,
+body.backoffice-theme .sidebar .nav .nav-item.active > .nav-link .menu-icon,
+body.backoffice-theme .sidebar .nav .nav-item.active > .nav-link .menu-title,
+body.backoffice-theme .sidebar .nav .nav-item .nav-link.active .menu-icon,
+body.backoffice-theme .sidebar .nav .nav-item .nav-link.active .menu-title {
+  color: var(--bm-primary) !important;
+}
+
+body.backoffice-theme .card {
+  border: 1px solid var(--bm-border);
+  border-radius: 14px;
+  box-shadow: var(--bm-shadow);
+}
+
+body.backoffice-theme .card .card-title,
+body.backoffice-theme h1,
+body.backoffice-theme h2,
+body.backoffice-theme h3,
+body.backoffice-theme h4,
+body.backoffice-theme h5,
+body.backoffice-theme h6 {
+  color: var(--bm-ink);
+}
+
+body.backoffice-theme .text-muted {
+  color: var(--bm-muted) !important;
+}
+
+body.backoffice-theme .btn {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+body.backoffice-theme .btn-primary {
+  background-color: var(--bm-primary);
+  border-color: var(--bm-primary);
+}
+
+body.backoffice-theme .btn-primary:hover,
+body.backoffice-theme .btn-primary:focus,
+body.backoffice-theme .btn-primary:active {
+  background-color: var(--bm-primary-hover) !important;
+  border-color: var(--bm-primary-hover) !important;
+}
+
+body.backoffice-theme .btn-outline-primary {
+  color: var(--bm-primary);
+  border-color: var(--bm-primary);
+}
+
+body.backoffice-theme .btn-outline-primary:hover,
+body.backoffice-theme .btn-outline-primary:focus,
+body.backoffice-theme .btn-outline-primary:active {
+  color: #ffffff;
+  background-color: var(--bm-primary);
+  border-color: var(--bm-primary);
+}
+
+body.backoffice-theme .btn-light {
+  color: var(--bm-ink);
+  border: 1px solid var(--bm-border);
+  background-color: #ffffff;
+}
+
+body.backoffice-theme .btn-light:hover {
+  color: var(--bm-ink);
+  border-color: #d3d3d3;
+  background-color: #f8f8f8;
+}
+
+body.backoffice-theme .btn-outline-secondary {
+  color: #5f6975;
+  border-color: #cdd2d8;
+}
+
+body.backoffice-theme .btn-outline-secondary:hover,
+body.backoffice-theme .btn-outline-secondary:focus,
+body.backoffice-theme .btn-outline-secondary:active {
+  color: #ffffff;
+  background-color: #5f6975;
+  border-color: #5f6975;
+}
+
+body.backoffice-theme .form-control,
+body.backoffice-theme .form-select,
+body.backoffice-theme textarea {
+  border-radius: 8px;
+  border-color: #dddddd;
+}
+
+body.backoffice-theme .form-control:focus,
+body.backoffice-theme .form-select:focus,
+body.backoffice-theme textarea:focus {
+  border-color: var(--bm-primary);
+  box-shadow: 0 0 0 0.2rem rgba(237, 86, 59, 0.2);
+}
+
+body.backoffice-theme .table {
+  --bs-table-striped-bg: #fff4f1;
+  --bs-table-hover-bg: #ffe9e4;
+  color: var(--bm-ink);
+}
+
+body.backoffice-theme .table thead th {
+  border-bottom: 2px solid #f1c9c0;
+  color: var(--bm-ink);
+  font-weight: 600;
+}
+
+body.backoffice-theme .table td,
+body.backoffice-theme .table th {
+  border-color: #efefef;
+  vertical-align: middle;
+}
+
+body.backoffice-theme .pagination .page-link {
+  color: var(--bm-ink);
+  border-color: #e4e4e4;
+}
+
+body.backoffice-theme .pagination {
+  gap: 0.2rem;
+}
+
+body.backoffice-theme .pagination .page-item .page-link {
+  border-radius: 6px;
+}
+
+body.backoffice-theme .pagination .page-item.active .page-link {
+  background-color: var(--bm-primary);
+  border-color: var(--bm-primary);
+  color: #ffffff;
+}
+
+body.backoffice-theme .pagination .page-link:focus {
+  box-shadow: 0 0 0 0.2rem rgba(237, 86, 59, 0.2);
+}
+
+body.backoffice-theme .alert-success {
+  background: #e8f6ee;
+  border-color: #b8e3c7;
+  color: #1f6b3a;
+}
+
+body.backoffice-theme .alert-danger {
+  background: #fdeeee;
+  border-color: #f6caca;
+  color: #942323;
+}
+
+body.backoffice-theme .img-thumbnail {
+  border-radius: 8px;
+}
+
+body.backoffice-theme .navbar .navbar-toggler {
+  color: #ffffff;
+}
+
+body.backoffice-theme .navbar .navbar-toggler .mdi {
+  color: #ffffff !important;
+}
+
+@media (max-width: 991.98px) {
+  body.backoffice-theme .content-wrapper {
+    padding: 1rem;
+  }
+}
