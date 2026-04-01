@@ -11,7 +11,7 @@
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-logout d-none d-lg-block">
                 <form method="GET" action="{{ url('/') }}" class="d-inline">
-                    <button type="submit" class="nav-link border-0 bg-transparent" title="Voltar ao menu principal">
+                    <button type="submit" class="nav-link border-0 bg-transparent" title="Voltar à Página Principal">
                         <i class="mdi mdi-logout"></i>
                     </button>
                 </form>

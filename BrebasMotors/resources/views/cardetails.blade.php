@@ -2,7 +2,7 @@
 
 @section('content')
 
-  <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/banner-image-1-1920x500.jpg')">
+  <section class="section section-bg" id="call-to-action" style="background-image: url('resources/images/bannerimage3.jpg')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
@@ -46,33 +46,64 @@
                     }
                 @endphp
 
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-              <ol class="carousel-indicators">
-                    @foreach ($galleryImages as $index => $image)
-                      <li data-target="#carouselExampleIndicators" data-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}"></li>
-                    @endforeach
-              </ol>
-              <div class="carousel-inner">
-                    @foreach ($galleryImages as $index => $image)
-                      <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                        <img class="d-block w-100" src="{{ asset($resolveImagePath($image)) }}" alt="{{ $car->title }}">
-                      </div>
-                    @endforeach
-              </div>
-              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
+            <div class="car-card-wrapper car-details-gallery-wrapper">
+                @auth
+                    <form action="{{ route('cars.favorite.toggle', $car) }}" method="POST" class="favorite-toggle-form">
+                        @csrf
+                        <button
+                            type="submit"
+                            class="car-favorite-button {{ !empty($isFavorite) ? 'is-favorite' : '' }}"
+                            title="{{ !empty($isFavorite) ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}"
+                            aria-label="{{ !empty($isFavorite) ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}"
+                        >
+                            <i class="fa {{ !empty($isFavorite) ? 'fa-heart' : 'fa-heart-o' }}" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                @else
+                    <a
+                        href="{{ route('login') }}"
+                        class="car-favorite-button car-favorite-login"
+                        title="Inicie sessão para guardar favoritos"
+                        aria-label="Inicie sessão para guardar favoritos"
+                    >
+                        <i class="fa fa-heart-o" aria-hidden="true"></i>
+                    </a>
+                @endauth
+
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                  <ol class="carousel-indicators">
+                        @foreach ($galleryImages as $index => $image)
+                          <li data-target="#carouselExampleIndicators" data-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}"></li>
+                        @endforeach
+                  </ol>
+                  <div class="carousel-inner">
+                        @foreach ($galleryImages as $index => $image)
+                          <div class="carousel-item {{ $index === 0 ? 'active' : '' }} car-details-carousel-item">
+                            <img class="d-block w-100" src="{{ asset($resolveImagePath($image)) }}" alt="{{ $car->title }}">
+                            @if($car->is_sold)
+                                <div class="car-sold-ribbon car-sold-ribbon--details">
+                                    <span>Vendido</span>
+                                </div>
+                            @endif
+                          </div>
+                        @endforeach
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
             </div>
             
             <br>
             <br>
-              <div class="col-lg-8">
-                <section class='tabs-content' style="width: 100%;">
+            <div class="row justify-content-center">
+              <div class="col-lg-10 col-12">
+                <section class='tabs-content car-details-tabs'>
                      <article id='tabs-1'>
                     <h4>Vehicle Specs</h4>
 
@@ -83,6 +114,11 @@
                        </div>
 
                        <div class="col-sm-6">
+                         <label>Ano</label>
+                         <p>{{ $car->year ?? '-' }}</p>
+                       </div>
+
+                       <div class="col-sm-6">
                          <label>Marca</label>
                          <p>{{ $car->brand }}</p>
                        </div>
@@ -90,11 +126,6 @@
                        <div class="col-sm-6">
                          <label>Modelo</label>
                          <p>{{ $car->model }}</p>
-                       </div>
-
-                       <div class="col-sm-6">
-                         <label>Ano</label>
-                         <p>{{ $car->year ?? '-' }}</p>
                        </div>
 
                        <div class="col-sm-6">
@@ -118,13 +149,13 @@
                        </div>
 
                        <div class="col-sm-6">
-                         <label>Potência</label>
-                         <p>{{ $car->power ? $car->power.' cv' : '-' }}</p>
+                         <label>Transmissão</label>
+                         <p>{{ $car->transmission ?? '-' }}</p>
                        </div>
 
                        <div class="col-sm-6">
-                         <label>Transmissão</label>
-                         <p>{{ $car->transmission ?? '-' }}</p>
+                         <label>Potência</label>
+                         <p>{{ $car->power ? $car->power.' cv' : '-' }}</p>
                        </div>
 
                        <div class="col-sm-6">
@@ -169,6 +200,61 @@
             </div>
         </div>
     </section>
+
+  <script>
+    (function() {
+      const favoriteForms = document.querySelectorAll('.favorite-toggle-form');
+
+      favoriteForms.forEach((form) => {
+        form.addEventListener('submit', async function (event) {
+          event.preventDefault();
+
+          const button = form.querySelector('.car-favorite-button');
+          const icon = button ? button.querySelector('i') : null;
+          if (!button || !icon || button.hasAttribute('data-loading')) {
+            return;
+          }
+
+          button.setAttribute('data-loading', '1');
+
+          try {
+            const response = await fetch(form.action, {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              body: new FormData(form)
+            });
+
+            if (!response.ok) {
+              throw new Error('Falha no pedido de favoritos.');
+            }
+
+            const payload = await response.json();
+            const isFavorite = !!payload.is_favorite;
+
+            button.classList.toggle('is-favorite', isFavorite);
+            icon.classList.toggle('fa-heart', isFavorite);
+            icon.classList.toggle('fa-heart-o', !isFavorite);
+
+            button.classList.remove('favorite-pop');
+            void button.offsetWidth;
+            button.classList.add('favorite-pop');
+
+            const label = isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
+            button.setAttribute('title', label);
+            button.setAttribute('aria-label', label);
+          } catch (error) {
+            console.error(error);
+          } finally {
+            button.removeAttribute('data-loading');
+            button.blur();
+          }
+        });
+      });
+    })();
+  </script>
     
     
 

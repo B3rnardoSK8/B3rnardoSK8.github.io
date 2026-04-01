@@ -1296,7 +1296,13 @@ trainers
   box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.18);
 }
 
+#trainers .car-card-wrapper:hover .trainer-item {
+  transform: translateY(-8px);
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.18);
+}
+
 #trainers .trainer-item .image-thumb {
+  position: relative;
   height: 200px;
   overflow: hidden;
   border-radius: 5px;
@@ -1815,6 +1821,72 @@ Account Settings Glass Layout
   margin-top: 12px;
 }
 
+.account-settings-photo-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.account-settings-photo-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.account-settings-photo-picker {
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: transparent;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.account-settings-photo-picker:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.65);
+  transform: translateY(-1px);
+}
+
+.account-settings-photo-remove {
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(185, 28, 28, 0.2);
+  color: #ffffff;
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.account-settings-photo-remove:hover {
+  background: rgba(185, 28, 28, 0.38);
+  border-color: rgba(255, 255, 255, 0.65);
+  transform: translateY(-1px);
+}
+
+.account-settings-photo-remove.is-disabled,
+.account-settings-photo-remove:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .account-settings-photo-label,
 .account-settings-card .form-group label {
   font-weight: 600;
@@ -1845,7 +1917,139 @@ Account Settings Glass Layout
 
 .account-settings-submit {
   border: none;
+  background: #ed563b;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 11px 22px;
+  border-radius: 8px;
+  transition: background 0.2s ease, transform 0.2s ease;
   cursor: pointer;
+}
+
+.account-settings-submit:hover {
+  background: #d54a31;
+  transform: translateY(-1px);
+}
+
+.account-settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.account-settings-delete-trigger,
+.account-settings-delete-confirm {
+  border: none;
+  background: #b91c1c;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 11px 22px;
+  border-radius: 8px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.account-settings-delete-trigger {
+  margin-left: auto;
+}
+
+.account-settings-delete-trigger:hover,
+.account-settings-delete-confirm:hover {
+  background: #991b1b;
+  transform: translateY(-1px);
+}
+
+.account-settings-delete-modal {
+  background: linear-gradient(160deg, rgba(19, 26, 38, 0.92) 0%, rgba(10, 16, 26, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 12px;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #ffffff;
+}
+
+.account-settings-delete-modal .modal-header {
+  padding: 1.2rem 1.2rem 0.2rem;
+}
+
+.account-settings-delete-modal .modal-title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.account-settings-delete-modal .modal-body {
+  padding: 0.8rem 1.2rem 1.25rem;
+}
+
+.account-settings-delete-modal .close,
+.account-settings-delete-modal label {
+  color: #ffffff;
+}
+
+.account-settings-delete-modal .close {
+  opacity: 0.85;
+  text-shadow: none;
+}
+
+.account-settings-delete-modal .close:hover {
+  opacity: 1;
+}
+
+.account-settings-delete-modal .form-control {
+  background: rgba(255, 255, 255, 0.17);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  border-radius: 7px;
+}
+
+.account-settings-delete-modal .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.account-settings-delete-modal .form-control:focus {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: #ed563b;
+  box-shadow: 0 0 0 0.2rem rgba(237, 86, 59, 0.22);
+  color: #ffffff;
+}
+
+.account-settings-delete-text {
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 14px;
+}
+
+.account-settings-delete-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.account-settings-delete-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: transparent;
+  color: #ffffff;
+  font-weight: 500;
+  padding: 11px 22px;
+  border-radius: 8px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.account-settings-delete-cancel:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.65);
+  color: #ffffff;
+}
+
+.account-settings-delete-error {
+  display: block;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  color: #fecaca;
+  font-weight: 500;
 }
 
 @media (max-width: 767px) {
@@ -1855,5 +2059,198 @@ Account Settings Glass Layout
 
   .account-settings-card {
     padding: 22px;
+  }
+}
+
+.car-card-wrapper {
+  position: relative;
+}
+
+.car-image-thumb {
+  position: relative;
+}
+
+.car-sold-ribbon {
+  position: absolute;
+  font-size: 20px;
+  top: 30px;
+  right: -55px;
+  width: 220px;
+  height: 35px;
+  background: rgba(255, 115, 0, 0.9);
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.car-sold-ribbon span {
+  color: #fff;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+  margin: 0 !important;
+  display: block;
+  line-height: 1;
+}
+
+#trainers .trainer-item .car-sold-ribbon span {
+  color: #fff !important;
+  margin: 0 !important;
+}
+
+.car-details-carousel-item {
+  position: relative;
+}
+
+.car-sold-ribbon--details {
+  top: 110px;
+  right: -100px;
+  width: 500px;
+  height: 65px;
+}
+
+.car-sold-ribbon--details span {
+  font-size: 32px !important;
+  font-weight: 900 !important;
+}
+
+.car-details-tabs {
+  width: 100%;
+}
+
+.favorite-toggle-form {
+  position: absolute;
+  top: 23px;
+  right: 23px;
+  z-index: 5;
+}
+
+.car-favorite-button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #7b8794;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+  transition: color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.car-favorite-button i {
+  font-size: 18px;
+}
+
+.car-favorite-button:hover,
+.car-favorite-button:focus-visible {
+  color: #ed563b;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.car-card-wrapper:hover .car-favorite-button {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.car-details-gallery-wrapper:hover .car-favorite-button:not(:hover):not(:focus-visible) {
+  transform: none;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.car-details-gallery-wrapper .car-favorite-button:hover,
+.car-details-gallery-wrapper .car-favorite-button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 18px rgba(0, 0, 0, 0.18);
+}
+
+.car-favorite-button.is-favorite {
+  color: #ed563b;
+}
+
+.car-favorite-login {
+  position: absolute;
+  top: 23px;
+  right: 23px;
+  z-index: 5;
+}
+
+.car-favorite-button[data-loading='1'] {
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.car-favorite-button.favorite-pop {
+  animation: favorite-pop 0.32s ease;
+}
+
+@keyframes favorite-pop {
+  0% {
+    transform: translateY(-4px) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.14);
+  }
+  100% {
+    transform: translateY(-4px) scale(1);
+  }
+}
+
+@media (max-width: 991px) {
+  #trainers .cars-grid {
+    justify-content: center;
+  }
+
+  #trainers .trainer-item .down-content {
+    text-align: center;
+  }
+
+  #trainers .trainer-item p {
+    text-align: center;
+  }
+
+  #trainers .trainer-item .social-icons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 767px) {
+  .favorite-toggle-form,
+  .car-favorite-login {
+    top: 14px;
+    right: 14px;
+  }
+
+  .car-sold-ribbon {
+    top: 12px;
+    right: -38px;
+    width: 168px;
+    height: 32px;
+  }
+
+  .car-sold-ribbon span {
+    font-size: 15px !important;
+  }
+
+  .car-sold-ribbon--details {
+    top: 14px;
+    right: -52px;
+    width: 240px;
+    height: 48px;
+  }
+
+  .car-sold-ribbon--details span {
+    font-size: 23px !important;
   }
 }

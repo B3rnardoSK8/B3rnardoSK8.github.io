@@ -5,10 +5,12 @@ use App\Http\Controllers\BackOfficeController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AccountSettingsController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Models\Car;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,8 +33,17 @@ Route::get('/', function () {
         $featuredCars = $featuredCars->concat($fallbackCars);
     }
 
+    $favoriteCarIds = [];
+    if (Auth::check()) {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $favoriteCarIds = $user->favoriteCars()->pluck('cars.id')->all();
+    }
+
     return view('home', [
         'featuredCars' => $featuredCars->values(),
+        'favoriteCarIds' => $favoriteCarIds,
     ]);
 });
 
@@ -68,9 +79,11 @@ Route::middleware('guest')->group(function () {
 Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
-    Route::get('definicoes', [AccountSettingsController::class, 'edit'])->name('account.settings');
-    Route::put('definicoes', [AccountSettingsController::class, 'update'])->name('account.settings.update');
-    Route::view('favoritos', 'account.favorites')->name('account.favorites');
+    Route::get('settings', [AccountSettingsController::class, 'edit'])->name('account.settings');
+    Route::put('settings', [AccountSettingsController::class, 'update'])->name('account.settings.update');
+    Route::delete('settings', [AccountSettingsController::class, 'destroy'])->name('account.settings.destroy');
+    Route::get('favorites', [FavoriteController::class, 'index'])->name('account.favorites');
+    Route::post('cars/{car}/favorite', [FavoriteController::class, 'toggle'])->name('cars.favorite.toggle');
     Route::get('back/dashboard', function () {
         abort_unless((int) Auth::user()->tipo_id === 1, 403);
 
@@ -79,6 +92,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('back/cars/highlights', [CarController::class, 'highlights'])->name('back.cars.highlights');
     Route::put('back/cars/highlights', [CarController::class, 'updateHighlights'])->name('back.cars.highlights.update');
+    Route::patch('back/cars/{car}/availability', [CarController::class, 'toggleAvailability'])->name('back.cars.availability.toggle');
 
     Route::resource('back/cars', CarController::class)
         ->names('back.cars')

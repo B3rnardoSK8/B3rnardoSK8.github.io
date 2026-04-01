@@ -3,14 +3,69 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\User;
+use App\Notifications\CarPriceChangedNotification;
+use App\Notifications\CarSoldNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class CarController extends Controller
 {
     private const DEFAULT_CAR_IMAGE = 'resources/images/car.png';
+    private const FAVORITES_MAIL_DELAY_SECONDS = 8;
+
+    private function notifyFavoriteUsersAboutPriceChange(Car $car, float $oldPrice, float $newPrice): void
+    {
+        $recipients = $car->favoritedByUsers()
+            ->whereNotNull('users.email')
+            ->get();
+
+        foreach ($recipients as $index => $recipient) {
+            try {
+                $delaySeconds = $index * self::FAVORITES_MAIL_DELAY_SECONDS;
+
+                $recipient->notify(
+                    (new CarPriceChangedNotification($car, $oldPrice, $newPrice))
+                        ->onQueue('mail')
+                        ->delay(now()->addSeconds($delaySeconds))
+                );
+            } catch (\Throwable $exception) {
+                Log::warning('Falha ao enviar notificacao de alteracao de preco.', [
+                    'car_id' => $car->id,
+                    'user_id' => $recipient->id,
+                    'error' => $exception->getMessage(),
+                ]);
+            }
+        }
+    }
+
+    private function notifyFavoriteUsersAboutSale(Car $car): void
+    {
+        $recipients = $car->favoritedByUsers()
+            ->whereNotNull('users.email')
+            ->get();
+
+        foreach ($recipients as $index => $recipient) {
+            try {
+                $delaySeconds = $index * self::FAVORITES_MAIL_DELAY_SECONDS;
+
+                $recipient->notify(
+                    (new CarSoldNotification($car))
+                        ->onQueue('mail')
+                        ->delay(now()->addSeconds($delaySeconds))
+                );
+            } catch (\Throwable $exception) {
+                Log::warning('Falha ao enviar notificacao de venda.', [
+                    'car_id' => $car->id,
+                    'user_id' => $recipient->id,
+                    'error' => $exception->getMessage(),
+                ]);
+            }
+        }
+    }
 
     private function normalizeImageReference(?string $path): ?string
     {
@@ -168,12 +223,22 @@ class CarController extends Controller
             'doors',
             'seats',
             'sort_by',
+            'available',
         ]);
 
         $query = Car::query();
 
         if ($request->filled('condition')) {
             $query->where('is_new', $request->input('condition') === 'new');
+        }
+
+        if ($request->filled('available')) {
+            $available = $request->input('available');
+            if ($available === 'sold') {
+                $query->where('is_sold', true);
+            } elseif ($available === 'available') {
+                $query->where('is_sold', false);
+            }
         }
 
         foreach (['segment', 'brand', 'model', 'engine', 'fuel'] as $field) {
@@ -213,7 +278,10 @@ class CarController extends Controller
         $sortBy = $request->input('sort_by', 'price_desc');
 
         switch ($sortBy) {
-            case 'year':
+            case 'year_asc':
+                $query->orderBy('year')->orderByDesc('id');
+                break;
+            case 'year_desc':
                 $query->orderByDesc('year')->orderByDesc('id');
                 break;
             case 'price_asc':
@@ -267,11 +335,20 @@ class CarController extends Controller
                 return $group->pluck('model')->values();
             });
 
+        $favoriteCarIds = [];
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::user();
+
+            $favoriteCarIds = $user->favoriteCars()->pluck('cars.id')->all();
+        }
+
         return view('cars', [
             'cars' => $cars,
             'filters' => $filters,
             'options' => $options,
             'modelsByBrand' => $modelsByBrand,
+            'favoriteCarIds' => $favoriteCarIds,
         ]);
     }
 
@@ -311,8 +388,8 @@ class CarController extends Controller
         $this->ensureAdmin();
 
         $data = $request->validate([
-            'featured_ids' => ['nullable', 'array', 'max:3'],
-            'featured_ids.*' => ['integer', 'distinct', 'exists:cars,id'],
+            'featured_ids' => ['required', 'array', 'size:3'],
+            'featured_ids.*' => ['required', 'integer', 'distinct', 'exists:cars,id'],
             'featured_order' => ['nullable', 'string'],
         ]);
 
@@ -456,8 +533,19 @@ class CarController extends Controller
             ]);
         }
 
+        $isFavorite = false;
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::user();
+
+            $isFavorite = $user->favoriteCars()
+                ->where('cars.id', $car->id)
+                ->exists();
+        }
+
         return view('cardetails', [
             'car' => $car,
+            'isFavorite' => $isFavorite,
         ]);
     }
 
@@ -470,9 +558,29 @@ class CarController extends Controller
         ]);
     }
 
+    public function toggleAvailability(Car $car)
+    {
+        $this->ensureAdmin();
+
+        $wasSold = (bool) $car->is_sold;
+        $car->is_sold = !$wasSold;
+        $car->save();
+
+        if (!$wasSold && $car->is_sold) {
+            $this->notifyFavoriteUsersAboutSale($car);
+        }
+
+        return redirect()
+            ->route('back.cars.index')
+            ->with('status', 'Disponibilidade do veículo atualizada com sucesso.');
+    }
+
     public function update(Request $request, Car $car)
     {
         $this->ensureAdmin();
+
+        $oldPrice = (float) $car->price;
+        $wasSold = (bool) $car->is_sold;
 
         $maxYear = (int) date('Y') + 1;
 
@@ -492,6 +600,7 @@ class CarController extends Controller
             'transmission' => ['nullable', 'string', 'max:255'],
             'doors' => ['nullable', 'integer', 'min:1', 'max:255'],
             'seats' => ['nullable', 'integer', 'min:1', 'max:255'],
+            'is_sold' => ['nullable', 'boolean'],
             'description' => ['nullable', 'string'],
             'images' => ['nullable', 'array'],
             'images.*' => ['nullable', 'image', 'max:4096'],
@@ -516,6 +625,7 @@ class CarController extends Controller
         $car->transmission = $request->input('transmission');
         $car->doors = $request->input('doors');
         $car->seats = $request->input('seats');
+        $car->is_sold = (bool) $request->input('is_sold', 0);
         $car->description = $request->input('description');
 
         $imagesToRemove = array_values(array_filter($request->input('remove_images', [])));
@@ -592,6 +702,15 @@ class CarController extends Controller
         $car->image_path = $galleryImages[0] ?? self::DEFAULT_CAR_IMAGE;
 
         $car->save();
+
+        $newPrice = (float) $car->price;
+        if (abs($newPrice - $oldPrice) > 0.00001) {
+            $this->notifyFavoriteUsersAboutPriceChange($car, $oldPrice, $newPrice);
+        }
+
+        if (!$wasSold && $car->is_sold) {
+            $this->notifyFavoriteUsersAboutSale($car);
+        }
 
         return redirect()
             ->route('back.cars.show', $car)

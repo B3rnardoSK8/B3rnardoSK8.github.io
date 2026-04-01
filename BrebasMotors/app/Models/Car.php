@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,7 @@ class Car extends Model
         'title',
         'is_new',
         'is_featured',
+        'is_sold',
         'featured_order',
         'segment',
         'brand',
@@ -36,6 +38,7 @@ class Car extends Model
     protected $casts = [
         'is_new' => 'boolean',
         'is_featured' => 'boolean',
+        'is_sold' => 'boolean',
         'featured_order' => 'integer',
         'year' => 'integer',
         'price' => 'decimal:2',
@@ -45,4 +48,10 @@ class Car extends Model
         'seats' => 'integer',
         'images' => 'array',
     ];
+
+    public function favoritedByUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'favorite_cars')
+            ->withTimestamps();
+    }
 }

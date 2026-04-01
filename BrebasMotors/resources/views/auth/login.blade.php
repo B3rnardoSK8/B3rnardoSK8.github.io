@@ -45,7 +45,7 @@
 
                 <div class="form-options">
                     <label class="remember-wrapper">
-                        <input type="checkbox" id="remember" name="remember">
+                        <input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
                         <span class="checkbox-label">
                             <span class="checkmark"></span>
                             Lembrar-me

@@ -23,7 +23,7 @@
                     <div class="cta-content">
                         <br>
                         <br>
-                        <h2>Os nossos <em>Carros</em></h2>
+                        <h2>As nossas <em>Viaturas</em></h2>
                         <br>
                     </div>
                 </div>
@@ -45,11 +45,22 @@
                             <div class="form-group text-center">
                                 <label>Ordenar por:</label>
                                 <select name="sort_by" class="form-control" id="sort-by-select">
-                                    <option value="year" {{ ($filters['sort_by'] ?? '') === 'year' ? 'selected' : '' }}>Ano</option>
+                                    <option value="year_asc" {{ ($filters['sort_by'] ?? '') === 'year_asc' ? 'selected' : '' }}>Ano crescente</option>
+                                    <option value="year_desc" {{ ($filters['sort_by'] ?? '') === 'year_desc' ? 'selected' : '' }}>Ano decrescente</option>
                                     <option value="price_asc" {{ ($filters['sort_by'] ?? '') === 'price_asc' ? 'selected' : '' }}>Preço crescente</option>
                                     <option value="price_desc" {{ ($filters['sort_by'] ?? 'price_desc') === 'price_desc' ? 'selected' : '' }}>Preço decrescente</option>
                                     <option value="mileage_asc" {{ ($filters['sort_by'] ?? '') === 'mileage_asc' ? 'selected' : '' }}>Kilometros crescentes</option>
                                     <option value="mileage_desc" {{ ($filters['sort_by'] ?? '') === 'mileage_desc' ? 'selected' : '' }}>Kilometros decrescentes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group text-center">
+                                <label>Disponibilidade:</label>
+                                <select name="available" class="form-control" id="available-select">
+                                    <option value="">-- Todos --</option>
+                                    <option value="available" {{ ($filters['available'] ?? '') === 'available' ? 'selected' : '' }}>Disponível</option>
+                                    <option value="sold" {{ ($filters['available'] ?? '') === 'sold' ? 'selected' : '' }}>Vendido</option>
                                 </select>
                             </div>
                         </div>
@@ -165,35 +176,68 @@
 
             <div class="row cars-grid">
                 @forelse ($cars as $car)
-                    <div class="col-lg-4">
-                        <a href="{{ route('cars.show', $car) }}" class="trainer-item d-block" style="text-decoration: none; color: inherit;">
-                            <div class="image-thumb">
-                                <img src="{{ asset($resolveImagePath($car->image_path)) }}" alt="{{ $car->title }}">
-                            </div>
-                            <div class="down-content">
-                                <span>
-                                    <sup>€</sup>{{ number_format($car->price, 0, ',', ' ') }}
-                                </span>
+                    <div class="col-lg-4 col-md-6 col-sm-10 col-12 mx-sm-auto mx-md-0">
+                        <div class="car-card-wrapper">
+                            @auth
+                                @php
+                                    $isFavorite = in_array($car->id, $favoriteCarIds ?? [], true);
+                                @endphp
+                                <form action="{{ route('cars.favorite.toggle', $car) }}" method="POST" class="favorite-toggle-form">
+                                    @csrf
+                                    <button
+                                        type="submit"
+                                        class="car-favorite-button {{ $isFavorite ? 'is-favorite' : '' }}"
+                                        title="{{ $isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}"
+                                        aria-label="{{ $isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}"
+                                    >
+                                        <i class="fa {{ $isFavorite ? 'fa-heart' : 'fa-heart-o' }}" aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <a
+                                    href="{{ route('login') }}"
+                                    class="car-favorite-button car-favorite-login"
+                                    title="Inicie sessão para guardar favoritos"
+                                    aria-label="Inicie sessão para guardar favoritos"
+                                >
+                                    <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                </a>
+                            @endauth
 
-                                <h4>{{ $car->title }}</h4>
-
-                                <p>
-                                    <i class="fa fa-dashboard"></i> {{ number_format($car->mileage, 0, ',', ' ') }} km &nbsp;&nbsp;&nbsp;
-                                    @if($car->power)
-                                        <i class="fa fa-cube"></i> {{ $car->power }} cv &nbsp;&nbsp;&nbsp;
+                            <a href="{{ route('cars.show', $car) }}" class="trainer-item d-block" style="text-decoration: none; color: inherit;">
+                                <div class="image-thumb car-image-thumb">
+                                    <img src="{{ asset($resolveImagePath($car->image_path)) }}" alt="{{ $car->title }}">
+                                    @if($car->is_sold)
+                                        <div class="car-sold-ribbon">
+                                            <span>Vendido</span>
+                                        </div>
                                     @endif
-                                    @if($car->transmission)
-                                        <i class="fa fa-cog"></i> {{ $car->transmission }}
-                                    @endif
-                                </p>
+                                </div>
+                                <div class="down-content">
+                                    <span>
+                                        <sup>€</sup>{{ number_format($car->price, 0, ',', ' ') }}
+                                    </span>
 
-                                <ul class="social-icons">
-                                    <li><span class="badge bg-secondary" style="color: #fff;">{{ $car->is_new ? 'Novo' : 'Usado' }}</span></li>
-                                    <li><span class="badge bg-light text-dark">{{ $car->fuel }}</span></li>
-                                    <li><span class="badge bg-light text-dark">{{ $car->segment }}</span></li>
-                                </ul>
-                            </div>
-                        </a>
+                                    <h4>{{ $car->title }}</h4>
+
+                                    <p>
+                                        <i class="fa fa-dashboard"></i> {{ number_format($car->mileage, 0, ',', ' ') }} km &nbsp;&nbsp;&nbsp;
+                                        @if($car->power)
+                                            <i class="fa fa-cube"></i> {{ $car->power }} cv &nbsp;&nbsp;&nbsp;
+                                        @endif
+                                        @if($car->transmission)
+                                            <i class="fa fa-cog"></i> {{ $car->transmission }}
+                                        @endif
+                                    </p>
+
+                                    <ul class="social-icons">
+                                        <li><span class="badge bg-secondary" style="color: #fff;">{{ $car->is_new ? 'Novo' : 'Usado' }}</span></li>
+                                        <li><span class="badge bg-light text-dark">{{ $car->fuel }}</span></li>
+                                        <li><span class="badge bg-light text-dark">{{ $car->segment }}</span></li>
+                                    </ul>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 @empty
                     <div class="col-12">
@@ -268,6 +312,57 @@
                 filterForm.submit();
             });
         }
+
+        const favoriteForms = document.querySelectorAll('.favorite-toggle-form');
+
+        favoriteForms.forEach((form) => {
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const button = form.querySelector('.car-favorite-button');
+                const icon = button ? button.querySelector('i') : null;
+                if (!button || !icon || button.hasAttribute('data-loading')) {
+                    return;
+                }
+
+                button.setAttribute('data-loading', '1');
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: new FormData(form)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Falha no pedido de favoritos.');
+                    }
+
+                    const payload = await response.json();
+                    const isFavorite = !!payload.is_favorite;
+
+                    button.classList.toggle('is-favorite', isFavorite);
+                    icon.classList.toggle('fa-heart', isFavorite);
+                    icon.classList.toggle('fa-heart-o', !isFavorite);
+
+                    button.classList.remove('favorite-pop');
+                    void button.offsetWidth;
+                    button.classList.add('favorite-pop');
+
+                    const label = isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
+                    button.setAttribute('title', label);
+                    button.setAttribute('aria-label', label);
+                } catch (error) {
+                    console.error(error);
+                } finally {
+                    button.removeAttribute('data-loading');
+                    button.blur();
+                }
+            });
+        });
     })();
 </script>
 

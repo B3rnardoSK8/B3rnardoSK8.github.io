@@ -10,10 +10,10 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
                         <h4 class="card-title mb-1">Destaques</h4>
-                        <p class="text-muted mb-0">Selecione ate 3 veiculos para a home page.</p>
+                        <p class="text-muted mb-0">Selecione 3 veículos para a Página Principal.</p>
                     </div>
                     <div class="d-flex align-items-center gap-2">
-                        <a href="{{ route('back.cars.index') }}" class="btn btn-light btn-sm">Voltar para Veiculos</a>
+                        <a href="{{ route('back.cars.index') }}" class="btn btn-light btn-sm">Voltar para Veículos</a>
                     </div>
                 </div>
 
@@ -83,8 +83,8 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mt-3">
-                        <small class="text-muted">Pode selecionar no maximo 3 veiculos. Arraste as linhas selecionadas para definir a ordem na home page.</small>
-                        <button type="submit" class="btn btn-primary btn-sm">Guardar Destaques</button>
+                        <small class="text-muted js-selection-status">Arraste as linhas selecionadas para definir a ordem na Página Principal.</small>
+                        <button type="submit" class="btn btn-primary btn-sm" id="saveHighlightsButton">Guardar Destaques</button>
                     </div>
                 </form>
 
@@ -154,9 +154,12 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const highlightsForm = document.getElementById('highlights-form');
         const tableBody = document.querySelector('.highlights-table tbody');
         const checkboxes = Array.from(document.querySelectorAll('.js-featured-checkbox'));
         const featuredOrderInput = document.getElementById('featuredOrderInput');
+        const saveHighlightsButton = document.getElementById('saveHighlightsButton');
+        const selectionStatus = document.querySelector('.js-selection-status');
         let draggedRow = null;
 
         function getRows() {
@@ -194,10 +197,21 @@
         function updateCheckboxState() {
             const selected = checkboxes.filter((checkbox) => checkbox.checked).length;
             const limitReached = selected >= 3;
+            const isValidSelection = selected === 3;
 
             checkboxes.forEach((checkbox) => {
                 checkbox.disabled = !checkbox.checked && limitReached;
             });
+
+            if (saveHighlightsButton) {
+                saveHighlightsButton.disabled = !isValidSelection;
+            }
+
+            if (selectionStatus) {
+                selectionStatus.textContent = isValidSelection
+                    ? 'Perfeito! 3 veículos selecionados! Arraste-os para ordená-los na Página Principal.'
+                    : `Selecione 3 veículos (atual: ${selected}/3).`;
+            }
 
             updateSelectedRowState();
             updateFeaturedOrderInput();
@@ -270,6 +284,15 @@
         checkboxes.forEach((checkbox) => {
             checkbox.addEventListener('change', updateCheckboxState);
         });
+
+        if (highlightsForm) {
+            highlightsForm.addEventListener('submit', function (event) {
+                const selected = checkboxes.filter((checkbox) => checkbox.checked).length;
+                if (selected !== 3) {
+                    event.preventDefault();
+                }
+            });
+        }
 
         updateCheckboxState();
     });

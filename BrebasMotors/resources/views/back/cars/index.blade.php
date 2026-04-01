@@ -33,7 +33,7 @@
                                 <th>Modelo</th>
                                 <th>Ano</th>
                                 <th>Preço</th>
-                                <th>Combustível</th>
+                                <th>Disponibilidade</th>
                                 <th>Estado</th>
                                 <th class="text-end">Ações</th>
                             </tr>
@@ -46,7 +46,19 @@
                                     <td>{{ $car->model }}</td>
                                     <td>{{ $car->year ?? '-' }}</td>
                                     <td>{{ number_format((float) $car->price, 0, ',', '.') }} EUR</td>
-                                    <td>{{ $car->fuel ?? '-' }}</td>
+                                    <td>
+                                        <form method="POST" action="{{ route('back.cars.availability.toggle', $car) }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm {{ $car->is_sold ? 'btn-outline-danger' : 'btn-outline-success' }}"
+                                                title="Clique para alternar disponibilidade"
+                                            >
+                                                {{ $car->is_sold ? 'Vendido' : 'Disponível' }}
+                                            </button>
+                                        </form>
+                                    </td>
                                     <td>{{ $car->is_new ? 'Novo' : 'Usado' }}</td>
                                     <td class="text-end">
                                         <div class="d-flex justify-content-end gap-2">

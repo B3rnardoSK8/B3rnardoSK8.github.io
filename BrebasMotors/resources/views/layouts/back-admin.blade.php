@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('plusadmin/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('resources/css/backoffice-theme.css') }}?v={{ @filemtime(public_path('resources/css/backoffice-theme.css')) }}">
 
-    <link rel="shortcut icon" href="resources/images/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('resources/images/logo.png') }}" type="image/x-icon">
     @stack('styles')
 </head>
 <body class="backoffice-theme">

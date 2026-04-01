@@ -18,15 +18,16 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
+        $remember = $request->boolean('remember');
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
 
         return back()->withErrors([
             'email' => 'Credenciais inválidas.',
-        ])->onlyInput('email');
+        ])->onlyInput(['email', 'remember']);
     }
 
     public function showRegister()

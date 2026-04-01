@@ -41,7 +41,7 @@
                             </a>
                             <ul class="nav">
                                 <li><a href="/" class="active">Início</a></li>
-                                <li><a href="/cars">Carros</a></li>
+                                <li><a href="/cars">Automóveis</a></li>
                                 <li class="dropdown">
                                     <a class="dropdown-toggle" data-toggle="dropdown" role="button"
                                         aria-haspopup="true" aria-expanded="false" href="#">Sobre</a>
