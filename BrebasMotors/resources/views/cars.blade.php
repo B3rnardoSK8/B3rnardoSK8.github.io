@@ -54,16 +54,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                            <div class="form-group text-center">
-                                <label>Disponibilidade:</label>
-                                <select name="available" class="form-control" id="available-select">
-                                    <option value="">-- Todos --</option>
-                                    <option value="available" {{ ($filters['available'] ?? '') === 'available' ? 'selected' : '' }}>Disponível</option>
-                                    <option value="sold" {{ ($filters['available'] ?? '') === 'sold' ? 'selected' : '' }}>Vendido</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                     
                     <div class="row">
