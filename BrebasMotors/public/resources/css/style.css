@@ -2104,6 +2104,40 @@ Account Settings Glass Layout
   margin: 0 !important;
 }
 
+.car-reserved-ribbon {
+  position: absolute;
+  font-size: 20px;
+  top: 30px;
+  right: -55px;
+  width: 220px;
+  height: 35px;
+  background: rgba(255, 193, 7, 0.9);
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.car-reserved-ribbon span {
+  color: #000;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.35);
+  white-space: nowrap;
+  margin: 0 !important;
+  display: block;
+  line-height: 1;
+}
+
+#trainers .trainer-item .car-reserved-ribbon span {
+  color: #000 !important;
+  margin: 0 !important;
+}
+
 .car-details-carousel-item {
   position: relative;
 }
@@ -2240,6 +2274,17 @@ Account Settings Glass Layout
   }
 
   .car-sold-ribbon span {
+    font-size: 15px !important;
+  }
+
+  .car-reserved-ribbon {
+    top: 12px;
+    right: -38px;
+    width: 168px;
+    height: 32px;
+  }
+
+  .car-reserved-ribbon span {
     font-size: 15px !important;
   }
 

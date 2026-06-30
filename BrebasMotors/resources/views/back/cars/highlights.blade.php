@@ -13,7 +13,7 @@
                         <p class="text-muted mb-0">Selecione 3 veículos para a Página Principal.</p>
                     </div>
                     <div class="d-flex align-items-center gap-2">
-                        <a href="{{ route('back.cars.index') }}" class="btn btn-light btn-sm">Voltar para Veículos</a>
+                        <a href="{{ route('back.cars.index') }}" class="btn btn-light btn-sm no-hover-white">Voltar à lista de Veículos</a>
                     </div>
                 </div>
 
@@ -75,7 +75,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center text-muted">Sem veiculos registados.</td>
+                                        <td colspan="7" class="text-center text-muted">Sem automóveis registados.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

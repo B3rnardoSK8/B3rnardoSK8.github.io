@@ -1,13 +1,13 @@
 @extends('layouts.back-admin')
 
-@section('title', 'Gestao de Utilizadores')
+@section('title', 'Gestão de Utilizadores')
 
 @section('content')
 <div class="row">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-1">Gestao de utilizadores</h4>
+                <h4 class="card-title mb-1">Gestão de utilizadores</h4>
                 <p class="text-muted mb-3">Lista de contas registadas</p>
 
                 @if (session('status'))
@@ -31,7 +31,7 @@
                                 <th>Email</th>
                                 <th>Tipo</th>
                                 <th>Registado em</th>
-                                <th class="text-end">Acoes</th>
+                                <th class="text-end">Ações</th>
                             </tr>
                         </thead>
                         <tbody>

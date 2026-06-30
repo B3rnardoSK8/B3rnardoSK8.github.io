@@ -134,15 +134,17 @@ body.backoffice-theme .btn-outline-primary:active {
 }
 
 body.backoffice-theme .btn-light {
-  color: var(--bm-ink);
-  border: 1px solid var(--bm-border);
+  color: var(--bm-ink) !important;
+  border: 1px solid var(--bm-border) !important;
   background-color: #ffffff;
 }
 
-body.backoffice-theme .btn-light:hover {
-  color: var(--bm-ink);
-  border-color: #d3d3d3;
-  background-color: #f8f8f8;
+body.backoffice-theme .btn-light:hover,
+body.backoffice-theme .btn-light:focus,
+body.backoffice-theme .btn-light:active {
+  color: #232d39 !important;
+  border-color: #d9dde2 !important;
+  background-color: #f8f8f8 !important;
 }
 
 body.backoffice-theme .btn-outline-secondary {
@@ -156,6 +158,77 @@ body.backoffice-theme .btn-outline-secondary:active {
   color: #ffffff;
   background-color: #5f6975;
   border-color: #5f6975;
+}
+
+body.backoffice-theme .btn:not(.no-hover-white):hover,
+body.backoffice-theme .btn:not(.no-hover-white):focus,
+body.backoffice-theme .btn:not(.no-hover-white):active,
+body.backoffice-theme .btn.active:not(.no-hover-white),
+body.backoffice-theme .show > .btn.dropdown-toggle:not(.no-hover-white) {
+  color: #ffffff !important;
+}
+
+body.backoffice-theme .btn.disabled,
+body.backoffice-theme .btn:disabled,
+body.backoffice-theme .btn.disabled:hover,
+body.backoffice-theme .btn:disabled:hover,
+body.backoffice-theme .btn.disabled:focus,
+body.backoffice-theme .btn:disabled:focus,
+body.backoffice-theme .btn.disabled:active,
+body.backoffice-theme .btn:disabled:active {
+  color: #adb5bd !important;
+  border-color: #adb5bd !important;
+  opacity: 1 !important;
+}
+
+body.backoffice-theme .table-responsive .btn:hover,
+body.backoffice-theme .table-responsive .btn:focus,
+body.backoffice-theme .table-responsive .btn:active,
+body.backoffice-theme .table-responsive .btn.active,
+body.backoffice-theme .table-responsive .show > .btn.dropdown-toggle,
+body.backoffice-theme .table-responsive .btn.disabled,
+body.backoffice-theme .table-responsive .btn:disabled {
+  color: #adb5bd !important;
+  border-color: #adb5bd !important;
+  opacity: 1 !important;
+}
+
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:hover,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:focus,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:active,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn.active,
+body.backoffice-theme .table-responsive table.table tbody tr td .show > .btn.dropdown-toggle,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn.disabled,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:disabled {
+  color: #adb5bd !important;
+  border-color: #adb5bd !important;
+  opacity: 1 !important;
+}
+
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:hover *,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:focus *,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:active *,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn.active *,
+body.backoffice-theme .table-responsive table.table tbody tr td .show > .btn.dropdown-toggle *,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn.disabled *,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:disabled * {
+  color: #adb5bd !important;
+}
+
+body.backoffice-theme .btn.no-hover-white:hover,
+body.backoffice-theme .btn.no-hover-white:focus,
+body.backoffice-theme .btn.no-hover-white:active,
+body.backoffice-theme .btn.no-hover-white.active,
+body.backoffice-theme .show > .btn.dropdown-toggle.no-hover-white {
+  color: inherit !important;
+}
+
+body.backoffice-theme .btn.no-hover-white:hover *,
+body.backoffice-theme .btn.no-hover-white:focus *,
+body.backoffice-theme .btn.no-hover-white:active *,
+body.backoffice-theme .btn.no-hover-white.active *,
+body.backoffice-theme .show > .btn.dropdown-toggle.no-hover-white * {
+  color: inherit !important;
 }
 
 body.backoffice-theme .form-control,
@@ -281,4 +354,79 @@ body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item.active > .nav-lin
 body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item:hover > .nav-link .menu-icon,
 body.backoffice-theme .sidebar .nav:not(.sub-menu) > .nav-item:hover > .nav-link .menu-title {
   color: #ed563b !important;
+}
+
+body.backoffice-theme .btn-outline-primary:hover,
+body.backoffice-theme .btn-outline-primary:focus,
+body.backoffice-theme .btn-outline-primary:active,
+body.backoffice-theme .btn-outline-secondary:hover,
+body.backoffice-theme .btn-outline-secondary:focus,
+body.backoffice-theme .btn-outline-secondary:active,
+body.backoffice-theme .btn-outline-warning:hover,
+body.backoffice-theme .btn-outline-warning:focus,
+body.backoffice-theme .btn-outline-warning:active,
+body.backoffice-theme .btn-outline-danger:hover,
+body.backoffice-theme .btn-outline-danger:focus,
+body.backoffice-theme .btn-outline-danger:active,
+body.backoffice-theme .table-responsive .btn:hover,
+body.backoffice-theme .table-responsive .btn:focus,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:hover,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:focus {
+  color: inherit !important;
+}
+
+body.backoffice-theme .btn-outline-primary:hover *,
+body.backoffice-theme .btn-outline-primary:focus *,
+body.backoffice-theme .btn-outline-primary:active *,
+body.backoffice-theme .btn-outline-secondary:hover *,
+body.backoffice-theme .btn-outline-secondary:focus *,
+body.backoffice-theme .btn-outline-secondary:active *,
+body.backoffice-theme .btn-outline-warning:hover *,
+body.backoffice-theme .btn-outline-warning:focus *,
+body.backoffice-theme .btn-outline-warning:active *,
+body.backoffice-theme .btn-outline-danger:hover *,
+body.backoffice-theme .btn-outline-danger:focus *,
+body.backoffice-theme .btn-outline-danger:active *,
+body.backoffice-theme .table-responsive .btn:hover *,
+body.backoffice-theme .table-responsive .btn:focus *,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:hover *,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:focus * {
+  color: inherit !important;
+}
+
+/* Table buttons: force white text on hover unless explicitly opted-out with .no-hover-white */
+body.backoffice-theme .table-responsive .btn:not(.no-hover-white):hover,
+body.backoffice-theme .table-responsive .btn:not(.no-hover-white):focus,
+body.backoffice-theme .table-responsive .btn:not(.no-hover-white):active,
+body.backoffice-theme .table-responsive .btn.active:not(.no-hover-white),
+body.backoffice-theme .table-responsive .show > .btn.dropdown-toggle:not(.no-hover-white),
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:not(.no-hover-white):hover,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:not(.no-hover-white):focus {
+  color: #ffffff !important;
+  border-color: inherit !important;
+}
+
+body.backoffice-theme .table-responsive .btn:not(.no-hover-white):hover *,
+body.backoffice-theme .table-responsive .btn:not(.no-hover-white):focus *,
+body.backoffice-theme .table-responsive .btn:not(.no-hover-white):active *,
+body.backoffice-theme .table-responsive .btn.active:not(.no-hover-white) *,
+body.backoffice-theme .table-responsive .show > .btn.dropdown-toggle:not(.no-hover-white) *,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:not(.no-hover-white):hover *,
+body.backoffice-theme .table-responsive table.table tbody tr td .btn:not(.no-hover-white):focus * {
+  color: #ffffff !important;
+}
+
+/* Ensure Bootstrap modals appear above backoffice overlays and controls */
+.modal {
+  z-index: 20000 !important;
+}
+
+.modal-backdrop {
+  z-index: 19990 !important;
+}
+
+/* Restore pointer events to modal dialog if overridden elsewhere */
+.modal .modal-dialog,
+.modal .modal-content {
+  pointer-events: auto !important;
 }

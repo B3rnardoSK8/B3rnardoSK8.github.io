@@ -6,7 +6,7 @@
                 <h2 class="mb-0">{{ $carsCount }}</h2>
                 <p class="text-muted mb-3">no catálogo</p>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('back.cars.index') }}" class="btn btn-outline-primary btn-sm">Listar Veículos</a>
+                    <a href="{{ route('back.cars.index') }}" class="btn btn-outline-primary btn-sm">Gerir Veículos</a>
                     <a href="{{ route('back.cars.create') }}" class="btn btn-primary btn-sm">Adicionar Veículo</a>
                 </div>
             </div>

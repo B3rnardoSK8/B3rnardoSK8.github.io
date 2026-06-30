@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Car;
 use App\Models\User;
+use App\Notifications\CarReservedNotification;
 use App\Notifications\CarPriceChangedNotification;
 use App\Notifications\CarSoldNotification;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -1098,9 +1101,11 @@ class CarController extends Controller
 
         $brandIsCustom = $request->input('brand') === '__add_brand';
         $modelIsCustom = $request->input('model') === '__add_model' || $request->filled('model_custom') || $brandIsCustom;
+        $segmentIsCustom = $request->filled('segment_custom');
 
         $brandRule = $brandIsCustom ? ['required', 'string', 'max:255'] : ['required', Rule::in($catalogOptions['brands'])];
         $modelRule = $modelIsCustom ? ['required', 'string', 'max:255'] : ['required', Rule::in($allowedModels)];
+        $segmentRule = $segmentIsCustom ? ['required', 'string', 'max:255'] : ['required', Rule::in($catalogOptions['segments'])];
 
         $fuelOptions = $this->fuelOptions();
         $transmissionRule = $modelIsCustom
@@ -1108,7 +1113,8 @@ class CarController extends Controller
             : ['required', Rule::in($allowedTransmissions)];
 
         $request->validate([
-            'segment' => ['required', Rule::in($catalogOptions['segments'])],
+            'segment' => $segmentRule,
+            'segment_custom' => $segmentIsCustom ? ['required', 'string', 'max:255'] : ['nullable'],
             'brand' => $brandRule,
             'brand_custom' => $brandIsCustom ? ['required', 'string', 'max:255'] : ['nullable'],
             'model' => $modelRule,
@@ -1271,16 +1277,19 @@ class CarController extends Controller
 
         $brandIsCustom = $request->input('brand') === '__add_brand';
         $modelIsCustom = $request->input('model') === '__add_model' || $request->filled('model_custom') || $brandIsCustom;
+        $segmentIsCustom = $request->filled('segment_custom');
 
         $brandRule = $brandIsCustom ? ['required', 'string', 'max:255'] : ['required', Rule::in($catalogOptions['brands'])];
         $modelRule = $modelIsCustom ? ['required', 'string', 'max:255'] : ['required', Rule::in($allowedModels)];
+        $segmentRule = $segmentIsCustom ? ['required', 'string', 'max:255'] : ['required', Rule::in($catalogOptions['segments'])];
         $fuelOptions = $this->fuelOptions();
         $transmissionRule = $modelIsCustom
             ? ['required', Rule::in(['Manual', 'Automática'])]
             : ['required', Rule::in($allowedTransmissions)];
 
         $request->validate([
-            'segment' => ['required', Rule::in($catalogOptions['segments'])],
+            'segment' => $segmentRule,
+            'segment_custom' => $segmentIsCustom ? ['required', 'string', 'max:255'] : ['nullable'],
             'brand' => $brandRule,
             'brand_custom' => $brandIsCustom ? ['required', 'string', 'max:255'] : ['nullable'],
             'model' => $modelRule,
@@ -1401,7 +1410,7 @@ class CarController extends Controller
         $car->save();
 
         $newPrice = (float) $car->price;
-        if (abs($newPrice - $oldPrice) > 0.00001) {
+        if (abs($newPrice - $oldPrice) > 0.01) {
             $this->notifyFavoriteUsersAboutPriceChange($car, $oldPrice, $newPrice);
         }
 
@@ -1428,5 +1437,44 @@ class CarController extends Controller
         return redirect()
             ->route('back.cars.index')
             ->with('status', 'Veículo removido com sucesso.');
+    }
+
+    public function reserve(Request $request, Car $car)
+    {
+        $this->ensureAdmin();
+
+        if ($request->input('reservation_action') === 'cancel') {
+            $car->cancelReservation();
+
+            return redirect()
+                ->route('back.cars.index')
+                ->with('status', 'Reserva do veículo cancelada com sucesso.');
+        }
+
+        // Se está vendido, não permite reservar
+        if ($car->is_sold) {
+            return redirect()
+                ->route('back.cars.index')
+                ->with('error', 'Não é possível reservar um veículo vendido.');
+        }
+
+        $validated = $request->validate([
+            'customer_email' => ['required', 'email', 'max:255'],
+            'reserved_until' => ['required', 'date', 'after:today'],
+        ]);
+
+        $reservedUntil = Carbon::parse($validated['reserved_until'])->endOfDay();
+
+        $car->is_reserved = true;
+        $car->reserved_until = $reservedUntil;
+        $car->reserved_email = $validated['customer_email'];
+        $car->save();
+
+        Notification::route('mail', $validated['customer_email'])
+            ->notify((new CarReservedNotification($car))->onQueue('mail'));
+
+        return redirect()
+            ->route('back.cars.index')
+            ->with('status', 'Veículo reservado com sucesso até ' . $car->reserved_until->format('d/m/Y'));
     }
 }

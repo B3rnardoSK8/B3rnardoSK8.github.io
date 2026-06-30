@@ -13,8 +13,8 @@
                         <p class="text-muted mb-0">Detalhes do Veículo</p>
                     </div>
                     <div class="d-flex gap-2">
-                        <a href="{{ route('back.cars.edit', $car) }}" class="btn btn-primary btn-sm">Editar</a>
-                        <a href="{{ route('back.cars.index') }}" class="btn btn-light btn-sm">Voltar</a>
+                        <a href="{{ route('back.cars.edit', $car) }}" class="btn btn-primary btn-sm no-hover-white">Editar</a>
+                        <a href="{{ route('back.cars.index') }}" class="btn btn-light btn-sm no-hover-white">Voltar</a>
                     </div>
                 </div>
 

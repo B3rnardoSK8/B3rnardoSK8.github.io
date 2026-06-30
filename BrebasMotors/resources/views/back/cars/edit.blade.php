@@ -99,7 +99,7 @@
                         <h4 class="card-title mb-1">Editar Veículo</h4>
                         <p class="text-muted mb-4">Atualize os dados do veículo</p>
                     </div>
-                    <a href="{{ route('back.cars.show', $car) }}" class="btn btn-light btn-sm">Voltar</a>
+                    <a href="{{ route('back.cars.show', $car) }}" class="btn btn-light btn-sm no-hover-white">Voltar</a>
                 </div>
 
                 @if ($errors->any())
@@ -163,16 +163,6 @@
                     @endphp
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Segmento</label>
-                            <input type="hidden" name="segment" id="segmentHidden" value="{{ old('segment', $car->segment) }}">
-                            <select id="segmentSelect" class="form-select car-auto-field" disabled>
-                                <option value="">Selecionar segmento</option>
-                                @foreach ($catalogOptions['segments'] as $segment)
-                                    <option value="{{ $segment }}" @selected($selectedSegment === $segment)>{{ $segment }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
                             <label class="form-label">Marca</label>
                             <select name="brand" id="brandSelect" class="form-select" required>
                                 <option value="">Selecionar marca</option>
@@ -191,8 +181,20 @@
                             <input type="text" id="modelCustom" name="model_custom" class="form-control mt-2 d-none" placeholder="Escreva o novo modelo" value="{{ old('model_custom', $car->model_custom ?? '') }}">
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label class="form-label">Segmento</label>
+                            <input type="hidden" name="segment" id="segmentHidden" value="{{ old('segment', $car->segment) }}">
+                            <select id="segmentSelect" class="form-select car-auto-field">
+                                <option value="">Selecionar segmento</option>
+                                @foreach ($catalogOptions['segments'] as $segment)
+                                    <option value="{{ $segment }}" @selected($selectedSegment === $segment)>{{ $segment }}</option>
+                                @endforeach
+                                <option value="__add_segment">Adicionar segmento...</option>
+                            </select>
+                            <input type="text" id="segmentCustom" name="segment_custom" class="form-control mt-2 d-none" placeholder="Escreva o novo segmento" value="{{ old('segment_custom', $car->segment_custom ?? '') }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label class="form-label">Ano</label>
-                            <input type="number" name="year" id="yearInput" class="form-control car-auto-field" value="{{ old('year', $car->year) }}" min="1900" max="{{ now()->year + 1 }}" placeholder="Selecionar modelo" readonly required>
+                            <input type="number" name="year" id="yearInput" class="form-control car-auto-field" value="{{ old('year', $car->year) }}" min="1900" max="{{ now()->year + 1 }}" placeholder="Selecionar modelo" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Preço (EUR)</label>
@@ -285,7 +287,7 @@
 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Guardar Alterações</button>
-                        <a href="{{ route('back.cars.index') }}" class="btn btn-light">Cancelar</a>
+                        <a href="{{ route('back.cars.index') }}" class="btn btn-light no-hover-white">Cancelar</a>
                     </div>
                 </form>
             </div>
@@ -297,6 +299,7 @@
             <script type="application/json" id="edit-car-specs-by-brand-model">{!! json_encode($catalogOptions['specsByBrandModel']) !!}</script>
             <script type="application/json" id="edit-car-selected-model">{!! json_encode(old('model', $car->model)) !!}</script>
             <script type="application/json" id="edit-car-selected-transmission">{!! json_encode(old('transmission', $car->transmission)) !!}</script>
+            <script type="application/json" id="edit-car-selected-segment">{!! json_encode(old('segment', $car->segment)) !!}</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -326,6 +329,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedTransmission = JSON.parse(document.getElementById('edit-car-selected-transmission').textContent);
     const brandCustom = document.getElementById('brandCustom');
     const modelCustom = document.getElementById('modelCustom');
+    const segmentCustom = document.getElementById('segmentCustom');
+    const selectedSegment = JSON.parse(document.getElementById('edit-car-selected-segment').textContent || 'null');
     let newImages = [];
     let draggedElement = null;
 
@@ -485,7 +490,6 @@ document.addEventListener('DOMContentLoaded', function () {
         doorsInput.readOnly = false;
         seatsInput.readOnly = false;
         fuelSelect.disabled = false;
-        segmentSelect.disabled = true;
         transmissionSelect.disabled = false;
         transmissionSelect.required = true;
         transmissionSelect.setCustomValidity('');
@@ -570,10 +574,44 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    segmentSelect.addEventListener('change', function () {
+        if (this.value === '__add_segment') {
+            segmentCustom.classList.remove('d-none');
+            segmentCustom.required = true;
+            segmentCustom.value = '';
+            segmentHidden.value = '';
+            segmentCustom.focus();
+        } else {
+            segmentCustom.classList.add('d-none');
+            segmentCustom.required = false;
+            segmentHidden.value = this.value;
+        }
+    });
+
+    segmentCustom.addEventListener('input', function () {
+        segmentHidden.value = this.value;
+    });
+
     transmissionSelect.addEventListener('change', function () {
         transmissionHidden.value = this.value;
         this.setCustomValidity('');
     });
+
+    if (selectedSegment) {
+        const exists = Array.from(segmentSelect.options).some((opt) => opt.value === selectedSegment);
+        if (!exists) {
+            segmentSelect.value = '__add_segment';
+            segmentCustom.classList.remove('d-none');
+            segmentCustom.required = true;
+            segmentCustom.value = selectedSegment;
+            segmentHidden.value = selectedSegment;
+        } else {
+            segmentSelect.value = selectedSegment;
+            segmentHidden.value = selectedSegment;
+        }
+    } else {
+        segmentHidden.value = segmentSelect.value || '';
+    }
 
     if (carForm) {
         carForm.addEventListener('submit', function (event) {

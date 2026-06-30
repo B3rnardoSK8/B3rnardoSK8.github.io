@@ -20,7 +20,7 @@
                 @csrf
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autocomplete="email">
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder=" ">
                         <label for="email">Email</label>
                         <span class="focus-border"></span>
                     </div>
@@ -31,7 +31,7 @@
 
                 <div class="form-group">
                     <div class="input-wrapper password-wrapper">
-                        <input type="password" id="password" name="password" required autocomplete="current-password">
+                        <input type="password" id="password" name="password" required autocomplete="current-password" placeholder=" ">
                         <label for="password">Password</label>
                         <button type="button" class="password-toggle" id="passwordToggle" aria-label="Toggle password visibility">
                             <span class="eye-icon"></span>

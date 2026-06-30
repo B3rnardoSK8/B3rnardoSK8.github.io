@@ -90,11 +90,11 @@
                   </div>
                   <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
+                    <span class="sr-only">Anterior</span>
                   </a>
                   <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
+                    <span class="sr-only">Próximo</span>
                   </a>
                 </div>
             </div>
@@ -105,7 +105,7 @@
               <div class="col-lg-10 col-12">
                 <section class='tabs-content car-details-tabs'>
                      <article id='tabs-1'>
-                    <h4>Vehicle Specs</h4>
+                    <h4>Detalhes do Automóvel</h4>
 
                     <div class="row">
                        <div class="col-sm-6">
@@ -134,7 +134,7 @@
                        </div>
 
                        <div class="col-sm-6">
-                         <label>Kilometragem</label>
+                         <label>Quilometragem</label>
                          <p>{{ number_format($car->mileage, 0, ',', ' ') }} km</p>
                        </div>
 
@@ -170,16 +170,16 @@
                     </div>
                      </article>
                      <article id='tabs-2'>
-                        <h4>Vehicle Description</h4>
+                        <h4>Descrição</h4>
                         
                         <p>{{ $car->description ?? 'Sem descrição.' }}</p> 
                       </article>
                   <article id='tabs-4'>
-                    <h4>Contact Details</h4>
+                    <h4>Detalhes de Contato</h4>
 
                     <div class="row">   
                         <div class="col-sm-6">
-                            <label>Vendedor:</label>
+                            <label>Vendedor</label>
 
                             <p>Bernardo Ângelo</p>
                         </div>

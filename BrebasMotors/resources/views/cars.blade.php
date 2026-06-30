@@ -49,8 +49,8 @@
                                     <option value="year_desc" {{ ($filters['sort_by'] ?? '') === 'year_desc' ? 'selected' : '' }}>Ano decrescente</option>
                                     <option value="price_asc" {{ ($filters['sort_by'] ?? '') === 'price_asc' ? 'selected' : '' }}>Preço crescente</option>
                                     <option value="price_desc" {{ ($filters['sort_by'] ?? 'price_desc') === 'price_desc' ? 'selected' : '' }}>Preço decrescente</option>
-                                    <option value="mileage_asc" {{ ($filters['sort_by'] ?? '') === 'mileage_asc' ? 'selected' : '' }}>Kilometros crescentes</option>
-                                    <option value="mileage_desc" {{ ($filters['sort_by'] ?? '') === 'mileage_desc' ? 'selected' : '' }}>Kilometros decrescentes</option>
+                                    <option value="mileage_asc" {{ ($filters['sort_by'] ?? '') === 'mileage_asc' ? 'selected' : '' }}>Quilómetros crescentes</option>
+                                    <option value="mileage_desc" {{ ($filters['sort_by'] ?? '') === 'mileage_desc' ? 'selected' : '' }}>Quilómetros decrescentes</option>
                                 </select>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                             <div class="form-group">
                                 <label>Usado/Novo:</label>
-                                 <select name="condition" class="form-control">
+                                 <select name="condition" id="condition-select" class="form-control">
                                       <option value="">-- Todos --</option>
                                       <option value="used" {{ ($filters['condition'] ?? '') === 'used' ? 'selected' : '' }}>Usado</option>
                                       <option value="new" {{ ($filters['condition'] ?? '') === 'new' ? 'selected' : '' }}>Novo</option>
@@ -118,8 +118,8 @@
                 
                         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                             <div class="form-group">
-                                <label>Kilometragem até:</label>
-                                 <select name="mileage_max" class="form-control">
+                                <label>Quilometragem até:</label>
+                                 <select name="mileage_max" id="mileage-select" class="form-control">
                                       <option value="">-- Todos --</option>
                                       @foreach ($options['mileages'] as $mileage)
                                         <option value="{{ $mileage }}" {{ ($filters['mileage_max'] ?? '') == $mileage ? 'selected' : '' }}>{{ number_format($mileage, 0, ',', ' ') }} km</option>
@@ -201,6 +201,10 @@
                                         <div class="car-sold-ribbon">
                                             <span>Vendido</span>
                                         </div>
+                                    @elseif($car->isCurrentlyReserved())
+                                        <div class="car-reserved-ribbon">
+                                            <span>Reservado</span>
+                                        </div>
                                     @endif
                                 </div>
                                 <div class="down-content">
@@ -251,6 +255,8 @@
         const sortBySelect = document.getElementById('sort-by-select');
         const brandSelect = document.getElementById('brand-select');
         const modelSelect = document.getElementById('model-select');
+        const conditionSelect = document.getElementById('condition-select');
+        const mileageSelect = document.getElementById('mileage-select');
         // Parse from a JSON string so the editor won't treat Blade directives as JS
         const modelsByBrand = JSON.parse('{!! json_encode($modelsByBrand ?? []) !!}');
 
@@ -296,6 +302,93 @@
             modelSelect.value = '';
             populateModels(this.value);
         });
+
+        function ensureZeroMileageOption() {
+            if (!mileageSelect) {
+                return;
+            }
+
+            if (!mileageSelect.querySelector('option[value="0"]')) {
+                const zeroOption = document.createElement('option');
+                zeroOption.value = '0';
+                zeroOption.textContent = '0 km';
+                if (mileageSelect.options.length > 1) {
+                    mileageSelect.insertBefore(zeroOption, mileageSelect.options[1]);
+                } else {
+                    mileageSelect.appendChild(zeroOption);
+                }
+            }
+        }
+
+        function removeZeroMileageOption() {
+            if (!mileageSelect) {
+                return;
+            }
+            const zeroOption = mileageSelect.querySelector('option[value="0"]');
+            if (zeroOption) {
+                zeroOption.remove();
+            }
+        }
+
+        function syncConditionFromMileage() {
+            if (!conditionSelect || !mileageSelect) {
+                return;
+            }
+
+            const mileageValue = mileageSelect.value;
+            if (mileageValue === '0') {
+                conditionSelect.value = 'new';
+            } else if (mileageValue) {
+                conditionSelect.value = 'used';
+            } else {
+                conditionSelect.value = '';
+            }
+        }
+
+        function syncMileageFromCondition() {
+            if (!conditionSelect || !mileageSelect) {
+                return;
+            }
+
+            if (conditionSelect.value === 'new') {
+                ensureZeroMileageOption();
+                mileageSelect.value = '0';
+            } else if (conditionSelect.value === 'used') {
+                if (mileageSelect.value === '0') {
+                    mileageSelect.value = '';
+                }
+                removeZeroMileageOption();
+            } else {
+                mileageSelect.value = '';
+                removeZeroMileageOption();
+            }
+        }
+
+        if (mileageSelect) {
+            mileageSelect.addEventListener('change', function () {
+                if (this.value === '0') {
+                    conditionSelect.value = 'new';
+                } else if (this.value) {
+                    conditionSelect.value = 'used';
+                } else {
+                    conditionSelect.value = '';
+                }
+            });
+        }
+
+        if (conditionSelect) {
+            conditionSelect.addEventListener('change', function () {
+                syncMileageFromCondition();
+            });
+        }
+
+        if (conditionSelect && mileageSelect) {
+            if (conditionSelect.value === 'new' || mileageSelect.value === '0') {
+                syncMileageFromCondition();
+            } else if (conditionSelect.value === 'used') {
+                removeZeroMileageOption();
+            }
+        }
 
         if (sortBySelect && filterForm) {
             sortBySelect.addEventListener('change', function () {

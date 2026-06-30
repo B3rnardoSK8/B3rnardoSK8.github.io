@@ -96,10 +96,10 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                        <h4 class="card-title mb-1">Adicionar Veículo</h4>
+                        <h4 class="card-title mb-1">Adicionar Automóvel</h4>
                         <p class="text-muted mb-4">Preencha os dados para adicionar um novo veículo ao catálogo.</p>
                     </div>
-                    <a href="{{ route('back.cars.index') }}" class="btn btn-light btn-sm">Voltar</a>
+                    <a href="{{ route('back.cars.index') }}" class="btn btn-light btn-sm no-hover-white">Voltar</a>
                 </div>
 
                 @if ($errors->any())
@@ -141,16 +141,18 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Segmento</label>
                             <input type="hidden" name="segment" id="segmentHidden" value="{{ old('segment') }}">
-                            <select id="segmentSelect" class="form-select car-auto-field" disabled>
+                            <select id="segmentSelect" class="form-select car-auto-field">
                                 <option value="">Selecionar segmento</option>
                                 @foreach ($catalogOptions['segments'] as $segment)
                                     <option value="{{ $segment }}" @selected(old('segment') === $segment)>{{ $segment }}</option>
                                 @endforeach
+                                <option value="__add_segment">Adicionar segmento...</option>
                             </select>
+                            <input type="text" id="segmentCustom" name="segment_custom" class="form-control mt-2 d-none" placeholder="Escreva o novo segmento" value="{{ old('segment_custom') }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Ano</label>
-                            <input type="number" name="year" id="yearInput" class="form-control car-auto-field" value="{{ old('year') }}" min="1900" max="{{ now()->year + 1 }}" placeholder="Selecionar modelo" readonly required>
+                            <input type="number" name="year" id="yearInput" class="form-control car-auto-field" value="{{ old('year') }}" min="1900" max="{{ now()->year + 1 }}" placeholder="Selecionar modelo" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Preço (EUR)</label>
@@ -217,7 +219,7 @@
 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Guardar</button>
-                        <a href="{{ route('back.cars.index') }}" class="btn btn-light">Cancelar</a>
+                        <a href="{{ route('back.cars.index') }}" class="btn btn-light no-hover-white">Cancelar</a>
                     </div>
                 </form>
             </div>
@@ -229,6 +231,7 @@
             <script type="application/json" id="create-car-specs-by-brand-model">{!! json_encode($catalogOptions['specsByBrandModel']) !!}</script>
             <script type="application/json" id="create-car-selected-model">{!! json_encode(old('model')) !!}</script>
             <script type="application/json" id="create-car-selected-transmission">{!! json_encode(old('transmission')) !!}</script>
+            <script type="application/json" id="create-car-selected-segment">{!! json_encode(old('segment')) !!}</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -258,6 +261,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedTransmission = JSON.parse(document.getElementById('create-car-selected-transmission').textContent);
     const brandCustom = document.getElementById('brandCustom');
     const modelCustom = document.getElementById('modelCustom');
+    const segmentCustom = document.getElementById('segmentCustom');
+    const selectedSegment = JSON.parse(document.getElementById('create-car-selected-segment').textContent || 'null');
     let newImages = [];
     let draggedElement = null;
 
@@ -417,7 +422,6 @@ document.addEventListener('DOMContentLoaded', function () {
         doorsInput.readOnly = false;
         seatsInput.readOnly = false;
         fuelSelect.disabled = false;
-        segmentSelect.disabled = true;
         transmissionSelect.disabled = false;
         transmissionSelect.required = true;
         transmissionSelect.setCustomValidity('');
@@ -442,7 +446,6 @@ document.addEventListener('DOMContentLoaded', function () {
         modelCustom.classList.add('d-none');
         modelCustom.required = false;
         modelCustom.placeholder = 'Escreva o novo modelo';
-        yearInput.readOnly = true;
         engineInput.readOnly = true;
         powerInput.readOnly = true;
         doorsInput.readOnly = true;
@@ -506,10 +509,44 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    segmentSelect.addEventListener('change', function () {
+        if (this.value === '__add_segment') {
+            segmentCustom.classList.remove('d-none');
+            segmentCustom.required = true;
+            segmentCustom.value = '';
+            segmentHidden.value = '';
+            segmentCustom.focus();
+        } else {
+            segmentCustom.classList.add('d-none');
+            segmentCustom.required = false;
+            segmentHidden.value = this.value;
+        }
+    });
+
+    segmentCustom.addEventListener('input', function () {
+        segmentHidden.value = this.value;
+    });
+
     transmissionSelect.addEventListener('change', function () {
         transmissionHidden.value = this.value;
         this.setCustomValidity('');
     });
+
+    if (selectedSegment) {
+        const exists = Array.from(segmentSelect.options).some((opt) => opt.value === selectedSegment);
+        if (!exists) {
+            segmentSelect.value = '__add_segment';
+            segmentCustom.classList.remove('d-none');
+            segmentCustom.required = true;
+            segmentCustom.value = selectedSegment;
+            segmentHidden.value = selectedSegment;
+        } else {
+            segmentSelect.value = selectedSegment;
+            segmentHidden.value = selectedSegment;
+        }
+    } else {
+        segmentHidden.value = segmentSelect.value || '';
+    }
 
     if (carForm) {
         carForm.addEventListener('submit', function (event) {

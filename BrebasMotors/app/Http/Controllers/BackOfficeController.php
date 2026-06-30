@@ -62,12 +62,6 @@ class BackOfficeController extends Controller
     {
         $this->ensureUsersManagementAccess();
 
-        if ((int) (Auth::id() ?? 0) === (int) $user->id) {
-            return redirect()
-                ->route('back.users.index')
-                ->with('error', 'Nao pode alterar o seu proprio cargo.');
-        }
-
         $validated = $request->validate([
             'tipo_id' => ['required', 'integer', 'exists:tipo,id'],
         ]);

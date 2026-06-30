@@ -20,7 +20,7 @@
                 @csrf
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="text" id="name" name="name" value="{{ old('name') }}" required autocomplete="name">
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" required autocomplete="name" placeholder=" ">
                         <label for="name">Nome</label>
                         <span class="focus-border"></span>
                     </div>
@@ -31,7 +31,7 @@
 
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autocomplete="email">
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder=" ">
                         <label for="email">Email</label>
                         <span class="focus-border"></span>
                     </div>
@@ -42,7 +42,7 @@
 
                 <div class="form-group">
                     <div class="input-wrapper password-wrapper">
-                        <input type="password" id="password" name="password" required autocomplete="new-password">
+                        <input type="password" id="password" name="password" required autocomplete="new-password" placeholder=" ">
                         <label for="password">Password</label>
                         <button type="button" class="password-toggle" aria-label="Mostrar/Ocultar password">
                             <span class="eye-icon"></span>
@@ -56,7 +56,7 @@
 
                 <div class="form-group">
                     <div class="input-wrapper password-wrapper">
-                        <input type="password" id="password_confirmation" name="password_confirmation" required autocomplete="new-password">
+                        <input type="password" id="password_confirmation" name="password_confirmation" required autocomplete="new-password" placeholder=" ">
                         <label for="password_confirmation">Confirmar Password</label>
                         <button type="button" class="password-toggle" aria-label="Mostrar/Ocultar confirmação da password">
                             <span class="eye-icon"></span>

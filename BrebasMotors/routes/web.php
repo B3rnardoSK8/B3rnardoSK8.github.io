@@ -93,6 +93,7 @@ Route::middleware('auth')->group(function () {
     Route::get('back/cars/highlights', [CarController::class, 'highlights'])->name('back.cars.highlights');
     Route::put('back/cars/highlights', [CarController::class, 'updateHighlights'])->name('back.cars.highlights.update');
     Route::patch('back/cars/{car}/availability', [CarController::class, 'toggleAvailability'])->name('back.cars.availability.toggle');
+    Route::patch('back/cars/{car}/reserve', [CarController::class, 'reserve'])->name('back.cars.reserve');
 
     Route::resource('back/cars', CarController::class)
         ->names('back.cars')
